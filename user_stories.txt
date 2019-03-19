@@ -1,0 +1,49 @@
+INTELLIGENT WEB ASSIGNMENT USER STORIES & PAGES:
+------------------------------------------------
+
+PAGES REQUIRED:
+---------------
+- Home Page
+- Login and registration
+- Create a post
+- Search for an event -> 2 pages, 1 for list and 1 for map
+- Take a selfie
+- Add a selfie to an event
+
+-->     PROGRAM LAYOUT:
+	--------------
+	- ~ 6 views
+	- 1 app.js -- JS and backend stuff/buttons/dropdowns/etc
+	- database.js -- retrieval of Database stuff
+	- users.js for routes
+	- other js files for each view or grouped by functionality	
+	- 2 database files: users, and user content. User content should include tables for events and posts, linked together
+
+
+FUNCTIONS:
+----------
+- Search for events by dates, keywords and location -- a form page with fields in the front end, DB queries in the backend
+  -> When searching by name and dates, show events in a list 
+  -> When searching by location, show events in a map -- most probably on a seperate page
+- Creation of events via a "create post" page. would include text, photos, address, author information etc.
+- When a photo selfie is taken, user should be able to either create event or select existing event from list -- so a page with existing events required, possibly the Home Page?
+- Webworkers required for working offline; take a selfie and create a draft which would cache locally until connection is back online, then data would update to the website.
+- User login system (simple). Name, email and password compulsory.
+
+Later:
+- Annotation links to DBPedia
+
+
+PACKAGES REQUIRED:
+------------------
+- Passport
+- Multe
+
+
+OTHER REQUIREMENENTS:
+---------------------
+- MongoDB for Database
+- Ajax for forms/functions
+- SocketIO for forms/functions
+- Express for website framework (done)
+- JSON for data communication

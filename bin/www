@@ -6,7 +6,8 @@
 
 var app = require('../app');
 var debug = require('debug')('assignment:server');
-var http = require('http');
+var https = require('https');
+var fs = require('fs-extra');
 
 /**
  * Get port from environment and store in Express.
@@ -16,10 +17,20 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTPs server.
  */
+var options = {
+  //private key
+  key: fs.readFileSync('./private_access/ca.key'),
+  // Certificate Signing Request
+  cert: fs.readFileSync('./private_access/ca.crt')
+};
 
-var server = http.createServer(app);
+/**
+ * Create HTTPs server using the options
+ */
+var server = https.createServer(options, app);
+// var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.

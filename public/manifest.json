@@ -1,0 +1,8 @@
+{
+  "name": "Events PWA",
+  "short_name": "ePWA",
+  "background_color": "rgba(243,33,33,0.02)",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/"
+}

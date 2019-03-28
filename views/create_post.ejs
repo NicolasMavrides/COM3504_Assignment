@@ -7,8 +7,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Selfie With Fame - Register</title>
+    <title>Selfie With Fame - Create Post</title>
     <link rel="manifest" href="/manifest.json">
+    <script src="/javascripts/idb.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -22,8 +23,7 @@
     <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
 </head>
 
-<!-- <body onload="initServiceWorker()"> -->
-<body onload="checkRegistrationCorrect(true)">
+<body onload="initServiceWorker()">
 
 <!-- Navigation -->
 <% include templates/navbar.ejs %>
@@ -37,7 +37,7 @@
                 <div class="site-heading">
 
                     <div class="container">
-                        <h3>User Registration</h3>
+                        <h3>User login</h3>
                     </div>
 
                 </div>
@@ -46,25 +46,41 @@
     </div>
 </header>
 
-<form action="register" method="POST">
-    First name:<br/>
-    <input type="text" name="firstname"><br>
-    Last name:<br/>
-    <input type="text" name="lastname"><br>
-    Email address:<br/>
-    <input type="text" name="email"><br>
-    Username:<br/>
-    <input type="text" name="username"><br>
-    Password:<br/>
-    <input type="password" name="password">
-    <br/>
-    <input type="submit"></form>
+<form id=“xForm" onsubmit="onSubmit('/create_story', '/')">
+    <div class="form-row">
+        <div class="form-group col-auto">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" name="username" placeholder="Name">
+        </div>
+        <div class="form-group col-auto">
+            <label for="eventname">Event Name:</label>
+            <input type="text" class="form-control" name="eventname">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-auto">
+            <label for="date">Date</label>
+            <input type="date" class="form-control" name="date">
+        </div>
+        <div class="form-group col-auto">
+            <label for="time">Time</label>
+            <input type="time" class="form-control" name="time">
+        </div>
+    </div>
+    <div class="form-group col-auto">
+        <label for="story">Your Story:</label>
+        <textarea class="form-control" name="story" rows="3" placeholder="Tell us your experience of the event..."></textarea>
+    </div>
+    <!--- TODO Picture section - WebRTC and Socket.io -->
+
+    <button type="submit" class="btn btn-primary">Post</button>
 </form>
 
 <hr>
 
 <!-- Footer -->
 <% include templates/footer.ejs %>
+
 
 <!-- Bootstrap core JavaScript -->
 <script src="/jquery/jquery.min.js"></script>
@@ -73,10 +89,7 @@
 <!-- Custom scripts for this template -->
 <script src="/javascripts/clean-blog.min.js"></script>
 <script src="/javascripts/app.js"></script>
-<script src="/javascripts/idb.js"></script>
-
-<!-- Form script -->
-<script src="/javascripts/register.js"></script>
+<script src="/javascripts/database.js"></script>
 
 </body>
 

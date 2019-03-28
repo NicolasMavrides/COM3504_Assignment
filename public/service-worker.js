@@ -76,10 +76,13 @@ var filesToCache = [
     '/fontawesome-free/webfonts/fa-solid-900.woff2',
     '/images/about-bg.jpg',
     '/images/home-bg.jpg',
+    '/javascripts/app.js',
     '/javascripts/clean-blog.js',
     '/javascripts/clean-blog.min.js',
-    '/javascripts/app.js',
+    '/javascripts/database.js',
     '/javascripts/idb.js',
+    '/javascripts/login.js',
+    '/javascripts/register.js',
     '/jquery/jquery.js',
     '/jquery/jquery.min.js',
     '/jquery/jquery.slim.js',
@@ -121,16 +124,6 @@ self.addEventListener('activate', function (e) {
             }));
         })
     );
-    /*
-     * Fixes a corner case in which the app wasn't returning the latest data.
-     * You can reproduce the corner case by commenting out the line below and
-     * then doing the following steps: 1) load app for first time so that the
-     * initial New York City data is shown 2) press the refresh button on the
-     * app 3) go offline 4) reload the app. You expect to see the newer NYC
-     * data, but you actually see the initial data. This happens because the
-     * service worker is not yet activated. The code below essentially lets
-     * you activate the service worker faster.
-     */
     return self.clients.claim();
 });
 
@@ -140,5 +133,43 @@ self.addEventListener('activate', function (e) {
  */
 self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
-    // TODO control flow for fetching pages - caching strategy
+    // TODO List URL's that post to server
+    var dataUrl = '/create_story';
+    //if the request is ... post to the server
+    if (event.request.url.indexOf(dataUrl) > -1) {
+        /*
+         * When the request URL contains dataUrl, the app is asking for fresh
+         * data. In this case, the service worker always goes to the
+         * network and then caches the response. This is called the "Cache then
+         * network" strategy:
+         * https://jakearchibald.com/2014/offline-cookbook/#cache-then-network
+         */
+        return fetch(event.request).then(function (response) {
+            // note: it the network is down, response will contain the error
+            // that will be passed to Ajax
+            return response;
+        }).catch (function(e){
+            console.log("service worker error 1: " + e.message);
+        })
+    } else {
+        /*
+         * The app is asking for app shell files. In this scenario the app uses the
+         * "Cache, then if netowrk available, it will refresh the cache
+         * see stale-while-revalidate at
+         * https://jakearchibald.com/2014/offline-cookbook/#on-activate
+         */
+        event.respondWith(async function () {
+            const cache = await caches.open('eventsPWA');
+            const cachedResponse = await cache.match(event.request);
+            const networkResponsePromise = fetch(event.request);
+
+            event.waitUntil(async function () {
+                const networkResponse = await networkResponsePromise;
+                await cache.put(event.request, networkResponse.clone());
+            }());
+
+            // Returned the cached response if we have one, otherwise return the network response.
+            return cachedResponse || networkResponsePromise;
+        }());
+    }
 });

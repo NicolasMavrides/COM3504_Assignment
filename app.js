@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var aboutRouter = require('./routes/about');
 var loginRouter = require('./routes/login');
+var postRouter = require('./routes/post');
 var registrationRouter = require('./routes/register');
 
 
@@ -27,6 +28,7 @@ app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/', aboutRouter);
 app.use('/', loginRouter);
+app.use('/', postRouter);
 app.use('/', registrationRouter);
 
 

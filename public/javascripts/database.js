@@ -184,14 +184,13 @@ function getStory(dataR) {
     return dataR.story
 }
 
-<<<<<<< HEAD
 // get Picture associated with story (possibly needed?)
 function getPhoto(dataR) {
     if (dataR.photo == null && dataR.photo === undefined)
         return "unavailable";
     return dataR.photo
 }
-=======
+
 //////////////////// Events //////////////////
 /**
  * given the server data, it returns the value of the name
@@ -247,4 +246,3 @@ function getLongitude(dataR) {
         return "unavailable";
     return dataR.longitude
 }
->>>>>>> b383500454112d32496e921f835c8c75bf6a8f23

@@ -8,11 +8,7 @@
  * @constructor
  */
 class StoryObject{
-<<<<<<< HEAD:controllers/post.js
     constructor (event, user, date, time, story, photo) {
-=======
-    constructor (event, username, date, time, story) {
->>>>>>> b383500454112d32496e921f835c8c75bf6a8f23:controllers/stories.js
         this.event = event;
         this.username = username;
         this.date = date;

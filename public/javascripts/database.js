@@ -7,6 +7,7 @@
         this.date = date;
         this.time = time;
         this.story = story;
+        this.photo = photo;
     }
 }
  */
@@ -85,6 +86,7 @@ function getCachedData() {
  * @param dataR the data returned by the server
  * @returns {*}
  */
+
 function getUsername(dataR) {
     if (dataR.username == null && dataR.username === undefined)
         return "unavailable";
@@ -133,4 +135,11 @@ function getStory(dataR) {
     if (dataR.story == null && dataR.story === undefined)
         return "unavailable";
     return dataR.story
+}
+
+// get Picture associated with story (possibly needed?)
+function getPhoto(dataR) {
+    if (dataR.photo == null && dataR.photo === undefined)
+        return "unavailable";
+    return dataR.photo
 }

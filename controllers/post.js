@@ -8,12 +8,13 @@
  * @constructor
  */
 class StoryObject{
-    constructor (event, user, date, time, story) {
+    constructor (event, user, date, time, story, photo) {
         this.event = event;
         this.user = user;
         this.date = date;
         this.time = time;
         this.story = story;
+        this.photo = photo;
     }
 }
 
@@ -29,7 +30,8 @@ exports.insert = function (req, res) {
             storyData.username,
             storyData.date,
             storyData.time,
-            storyData.story
+            storyData.story,
+            storyData.photo
         );
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(story));

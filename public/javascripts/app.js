@@ -75,6 +75,7 @@ function addToResults(dataR) {
             "<h2 class='post-title'>" + getEvent(dataR) + "</h2>" +
             "<h3 class='post-subtitle'>" + getStory(dataR) + "</h3></a>" +
             "<p class='post-meta'>Posted by " + getUsername(dataR) + " on " +
-            getDate(dataR) + ", " + getTime(dataR) + "</p>";
+            getDate(dataR) + ", " + getTime(dataR) +
+            getPhoto(dataR) +"</p>";
     }
 }

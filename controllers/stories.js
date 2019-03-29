@@ -1,6 +1,6 @@
 /**
  * @param location TODO
- * @param user
+ * @param username
  * @param event TODO associate to event class
  * @param date
  * @param time
@@ -8,9 +8,13 @@
  * @constructor
  */
 class StoryObject{
+<<<<<<< HEAD:controllers/post.js
     constructor (event, user, date, time, story, photo) {
+=======
+    constructor (event, username, date, time, story) {
+>>>>>>> b383500454112d32496e921f835c8c75bf6a8f23:controllers/stories.js
         this.event = event;
-        this.user = user;
+        this.username = username;
         this.date = date;
         this.time = time;
         this.story = story;
@@ -18,7 +22,7 @@ class StoryObject{
     }
 }
 
-exports.insert = function (req, res) {
+exports.create = function (req, res) {
     // create story object
     var storyData = req.body;
     if (storyData == null) {
@@ -38,4 +42,4 @@ exports.insert = function (req, res) {
     } catch (e) {
         res.status(500).send('error ' + e);
     }
-}
+};

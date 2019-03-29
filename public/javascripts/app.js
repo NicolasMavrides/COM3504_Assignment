@@ -106,9 +106,9 @@ function loadEventData(id){
     console.log(id);
     getEventById(id, function(dataR){
         console.log('doing');
-        document.getElementById('title').innerHTML = dataR.name;
-        document.getElementById('subheading').innerHTML = dataR.description;
-        document.getElementById('date').innerHTML = dataR.date;
+        document.getElementById('title').innerHTML = getEventname(dataR);
+        document.getElementById('subheading').innerHTML = getEventdescription(dataR);
+        document.getElementById('date').innerHTML = getEventdate(dataR);
         getCachedStories(dataR.name);
     })
 }

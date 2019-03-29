@@ -20,10 +20,11 @@
     <link href="/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/stylesheets/leaflet.css" />
+    <script src="/javascripts/leaflet.js"></script>
 
     <!-- Custom styles for this template -->
     <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
-    <link href="/stylesheets/blog-post.css" rel="stylesheet">
 </head>
 
 <body onload="initServiceWorker(); loadEventData(<%= id %>)">
@@ -61,6 +62,8 @@
         </p>-->
 
         <!-- TODO Include Map -->
+        <div id="mapid" style="height: 400px; width:800px">
+        </div>
 
         <hr>
         <p>User Stories from this event</p>

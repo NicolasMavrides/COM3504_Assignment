@@ -104,13 +104,14 @@ function addToStories(dataR) {
 
 
 function loadEventData(id){
-    console.log(id);
     getEventById(id, function(dataR){
         console.log('doing');
         document.getElementById('title').innerHTML = getEventname(dataR);
         document.getElementById('subheading').innerHTML = getEventdescription(dataR);
         document.getElementById('date').innerHTML = getEventdate(dataR);
         getCachedStories(dataR.name);
+        var marker = [getLatitude(dataR), getLongitude(dataR)];
+        generateMap(marker, marker, getEventname(dataR));
     })
 }
 
@@ -127,7 +128,7 @@ function getLocation() {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
         console.log("Geolocation is not supported by this browser.");
-        generateMap();
+        generateMap(null, null, null);
     }
     document.getElementById('mapSection').style.display='block';
 }
@@ -136,7 +137,7 @@ function showPosition(position){
     console.log("Latitude: " + position.coords.latitude +
         "Longitude: " + position.coords.latitude);
     latLong = [position.coords.latitude, position.coords.latitude];
-    generateMap();
+    generateMap(null, null, null);
 }
 
 function showError(error) {
@@ -152,34 +153,27 @@ function showError(error) {
             break;
         case error.UNKNOWN_ERROR:
             console.log("An unknown error occurred.");
-            break; }}
-
-function onMapClick(e) {
-    if (confirm("Is this the location you would like to add?")) {
-        document.getElementById('latitude').value = e.latlng.lat;
-        document.getElementById('longitude').value = e.latlng.lng;
-        if (marker != null)
-            marker.remove();
-        marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+            break;
     }
 }
 
-function generateMap(){
+function generateMap(marker, center, eventName){
+    const mapBoxKey = 'pk.eyJ1IjoiaW5pZ2VuYTEiLCJhIjoiY2p0c2tyN2Q0MHEwazQ0cW5nYXdweTY0YSJ9.OsacubTngg18fAn4BBx0ig';
     var streets = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
         id: 'mapbox.streets',
-        accessToken: 'pk.eyJ1IjoiaW5pZ2VuYTEiLCJhIjoiY2p0c2tyN2Q0MHEwazQ0cW5nYXdweTY0YSJ9.OsacubTngg18fAn4BBx0ig'
+        accessToken: mapBoxKey
     });
     var satellite = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
         id: 'mapbox.satellite',
-        accessToken: 'pk.eyJ1IjoiaW5pZ2VuYTEiLCJhIjoiY2p0c2tyN2Q0MHEwazQ0cW5nYXdweTY0YSJ9.OsacubTngg18fAn4BBx0ig'
+        accessToken: mapBoxKey
     });
 
     mymap = L.map('mapid',{
-        center: latLong,
+        center: center || latLong,
         zoom: 13,
         layers: [satellite, streets]
     });
@@ -191,5 +185,7 @@ function generateMap(){
 
     L.control.layers(baseMaps).addTo(mymap);
     L.control.scale().addTo(mymap);
-    mymap.on('click', onMapClick);
+    if (marker!=null) {
+        L.marker(marker).addTo(mymap).bindPopup('<b>'+eventName+'</b>');
+    }
 }

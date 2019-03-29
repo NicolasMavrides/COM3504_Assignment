@@ -58,7 +58,6 @@ var filesToCache = [
     '/fontawesome-free/sprites/brands.svg',
     '/fontawesome-free/sprites/regular.svg',
     '/fontawesome-free/sprites/solid.svg',
-    //TODO /fontawesome-free/svgs,
     '/fontawesome-free/webfonts/fa-brands-400.eot',
     '/fontawesome-free/webfonts/fa-brands-400.svg',
     '/fontawesome-free/webfonts/fa-brands-400.ttf',
@@ -75,12 +74,19 @@ var filesToCache = [
     '/fontawesome-free/webfonts/fa-solid-900.woff',
     '/fontawesome-free/webfonts/fa-solid-900.woff2',
     '/images/about-bg.jpg',
+    '/images/events-bg.jpg',
     '/images/home-bg.jpg',
     '/javascripts/app.js',
     '/javascripts/clean-blog.js',
     '/javascripts/clean-blog.min.js',
     '/javascripts/database.js',
     '/javascripts/idb.js',
+    '/javascripts/leaflet.js',
+    '/javascripts/leaflet.js.map',
+    '/javascripts/leaflet-src.esm.js',
+    '/javascripts/leaflet-src.esm.js.map',
+    '/javascripts/leaflet-src.js',
+    '/javascripts/leaflet-src.js.map',
     '/javascripts/login.js',
     '/javascripts/register.js',
     '/jquery/jquery.js',
@@ -89,8 +95,15 @@ var filesToCache = [
     '/jquery/jquery.slim.min.js',
     '/jquery/jquery.min.map',
     '/jquery/jquery.slim.min.map',
+    '/stylesheets/images/layers.png',
+    '/stylesheets/images/layers-2x.png',
+    '/stylesheets/images/marker-icon.png',
+    '/stylesheets/images/marker-icon-2x.png',
+    '/stylesheets/images/marker-shadow.png',
+    '/stylesheets/blog-post.css',
     '/stylesheets/clean-blog.css',
     '/stylesheets/clean-blog.min.css',
+    '/stylesheets/leaflet.css',
     '/stylesheets/style.css'
 ];
 
@@ -134,9 +147,9 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
     // TODO List URL's that post to server
-    var dataUrl = '/create_story';
+    //var dataUrl = '/post_story';
     //if the request is ... post to the server
-    if (event.request.url.indexOf(dataUrl) > -1) {
+    if (event.request.url.indexOf('/post_story') > -1 || event.request.url.indexOf('/post_event') > -1) {
         /*
          * When the request URL contains dataUrl, the app is asking for fresh
          * data. In this case, the service worker always goes to the

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--TODO Change this title -->
+    <title>Clean Blog - Start Bootstrap Theme</title>
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/javascripts/idb.js"></script>
+
+    <!-- Custom fonts for this template -->
+    <link href="/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
+    <link href="/stylesheets/blog-post.css" rel="stylesheet">
+</head>
+
+<body onload="initServiceWorker(); loadEventData(<%= id %>)">
+
+<% include templates/navbar.ejs %>
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('/images/events-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1 id="title"></h1>
+                    <span id="subheading" class="subheading"></span>
+                    <span id="date" class="subheading"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+
+    <!-- Post Content Column -->
+    <div class="col">
+        <!-- Title -->
+        <!--<h1 class="mt-4"></h1>-->
+
+        <!-- Author -->
+        <!--<p class="lead">
+            by
+            <a href="#">Start Bootstrap</a>
+        </p>-->
+
+        <!-- TODO Include Map -->
+
+        <hr>
+        <p>User Stories from this event</p>
+
+        <hr>
+        <!-- Post Content -->
+        <div id="stories" class="col-lg-8 col-md-10 mx-auto">
+        </div>
+
+        <hr>
+
+        <!-- Comments Form -->
+        <div class="card my-4">
+            <h5 class="card-header">Leave a Comment:</h5>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Single Comment -->
+        <div class="media mb-4">
+            <img class="d-flex mr-3 rounded-circle" src="" alt="">
+            <div class="media-body">
+                <h5 class="mt-0">Commenter Name</h5>
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+            </div>
+        </div>
+
+        <!-- Comment with nested comments -->
+        <div class="media mb-4">
+            <img class="d-flex mr-3 rounded-circle" src="" alt="">
+            <div class="media-body">
+                <h5 class="mt-0">Commenter Name</h5>
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+
+                <div class="media mt-4">
+                    <img class="d-flex mr-3 rounded-circle" src="" alt="">
+                    <div class="media-body">
+                        <h5 class="mt-0">Commenter Name</h5>
+                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                    </div>
+                </div>
+
+                <div class="media mt-4">
+                    <img class="d-flex mr-3 rounded-circle" src="" alt="">
+                    <div class="media-body">
+                        <h5 class="mt-0">Commenter Name</h5>
+                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<hr>
+
+<!-- Footer -->
+<% include templates/footer.ejs %>
+
+
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="/javascripts/clean-blog.min.js"></script>
+<script src="/javascripts/app.js"></script>
+<script src="/javascripts/database.js"></script>
+
+</body>
+
+</html>

@@ -23,5 +23,23 @@ var jsonData = JSON.parse(fs.readFileSync('./sample_users.json'));
 console.log(jsonData);
 
 exports.create = function (req, res) {
+    // create story object
+    var userData = req.body;
+    if (userData == null) {
+        res.status(403).send('No data sent!')
+    }
+    try {
+        var user = new UserObject(
+            userData.firstname,
+            userData.lastname,
+            userData.email,
+            userData.username,
+            userData.password
+        );
 
-}
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(user));
+    } catch (e) {
+        res.status(500).send('error ' + e);
+    }
+};

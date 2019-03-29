@@ -184,7 +184,12 @@ function getStory(dataR) {
     return dataR.story
 }
 
-// get Picture associated with story (possibly needed?)
+
+/**
+ * given the server data, it returns the value of the story
+ * @param dataR the data returned by the server
+ * @returns {*}
+ */
 function getPhoto(dataR) {
     if (dataR.photo == null && dataR.photo === undefined)
         return "unavailable";
@@ -242,6 +247,13 @@ function getLatitude(dataR) {
  * @returns {*}
  */
 function getLongitude(dataR) {
+    if (dataR.longitude == null && dataR.longitude === undefined)
+        return "unavailable";
+    return dataR.longitude
+}
+
+//////////////////// Users //////////////////
+function registerUser(dataR) {
     if (dataR.longitude == null && dataR.longitude === undefined)
         return "unavailable";
     return dataR.longitude

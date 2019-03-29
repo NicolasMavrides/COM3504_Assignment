@@ -29,6 +29,7 @@ router.post('/login', function(req, res, next) {
 
 
 //////////////////// Register //////////////////
+var users = require('../controllers/users');
 
 /* GET register page. */
 router.get('/register', function(req, res, next) {
@@ -36,13 +37,6 @@ router.get('/register', function(req, res, next) {
 });
 
 /* POST register form. */
-router.post('/register', function(req, res, next) {
-  //var login= req.body.login;
-  //var password= req.body.password;
-  // Other vars here related to user information...
-
-  // When user hits submit, validate information and add to database tables etc.
-
-});
+router.post('/register', users.create);
 
 module.exports = router;

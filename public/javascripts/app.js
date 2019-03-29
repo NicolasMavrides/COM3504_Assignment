@@ -17,7 +17,7 @@ function initServiceWorker() {
     //check for support
     if ('indexedDB' in window) {
         initDatabase();
-        getCachedEvents('store_events');
+        getCachedEvents();
     }
     else {
         console.log('This browser doesn\'t support IndexedDB');

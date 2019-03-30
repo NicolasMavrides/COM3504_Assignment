@@ -6,12 +6,13 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-
 /////////////////// Login //////////////////////
+var users = require('../controllers/users');
 
 /* GET login page. */
 router.get('/login', function(req, res, next) {
   res.render('login', { title: 'My Class', login_is_correct: true });
+
 });
 
 /* POST login form. */
@@ -19,21 +20,19 @@ router.post('/login', function(req, res, next) {
   var login= req.body.username;
   var password= req.body.password;
 
-  if (login=='nicolas' || login== 'idris'){
-    res.render('index', { title: login,  login_is_correct: true });
+  if ((users.list.some(item => item.username === login)) && (users.list.some(item => item.password === password))) {
+    res.render('index', { login_is_correct: true });
   } else {
-    res.render('login', { title: 'My Class', login_is_correct: false });
+    res.render('login', { login_is_correct: false });
   }
 
 });
 
-
 //////////////////// Register //////////////////
-var users = require('../controllers/users');
-
 /* GET register page. */
 router.get('/register', function(req, res, next) {
-  res.render('register', { title: 'My Class', login_is_correct: true });
+  res.render('register', { login_is_correct: true });
+  console.log(users.list);
 });
 
 /* POST register form. */

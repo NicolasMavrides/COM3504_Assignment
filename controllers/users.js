@@ -22,24 +22,25 @@ class UserObject{
 var jsonData = JSON.parse(fs.readFileSync('./sample_users.json'));
 console.log(jsonData);
 
-exports.create = function (req, res) {
-    // create story object
+exports.create = function(req, res) {
+    // create user object
     var userData = req.body;
     if (userData == null) {
         res.status(403).send('No data sent!')
     }
     try {
-        var user = new UserObject(
-            userData.firstname,
-            userData.lastname,
-            userData.email,
-            userData.username,
-            userData.password
-        );
+        var newUser = new UserObject(userData.firstname, userData.lastname, userData.email, userData.username, userData.password);
+        var newUserData = { firstname:newUser.firstname, lastname:newUser.lastname, email:newUser.email, username:newUser.username, password:newUser.password };
 
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(user));
+        jsonData.push(newUserData);
+        console.log(jsonData);
+        //res.send(true);
+        res.redirect('/');
+
     } catch (e) {
         res.status(500).send('error ' + e);
     }
 };
+
+exports.list = jsonData;

@@ -89,7 +89,6 @@ var filesToCache = [
     '/javascripts/leaflet-src.js',
     '/javascripts/leaflet-src.js.map',
     '/javascripts/login.js',
-    '/javascripts/map-interact.js',
     '/javascripts/register.js',
     '/jquery/jquery.js',
     '/jquery/jquery.min.js',

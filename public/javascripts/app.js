@@ -173,10 +173,12 @@ function showMap(){
     //Check for support
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
+        mymap.on('click', onMapClick);
     } else {
         //Generates map with default map center
         console.log("Geolocation is not supported by this browser.");
         generateMap(null, latLong, null);
+        mymap.on('click', onMapClick);
     }
     document.getElementById('mapSection').style.display='block';
 }
@@ -262,5 +264,17 @@ function generateMap(marker, center, eventName){
     // Add a marker to the map
     if (marker!=null) {
         L.marker(marker).addTo(mymap).bindPopup('<b>'+eventName+'</b>');
+    }
+}
+
+function onMapClick(e) {
+    if (confirm("Is this the location you would like to add?")) {
+        document.getElementById('latitude').value = e.latlng.lat;
+        document.getElementById('longitude').value = e.latlng.lng;
+        // Removes any old markers
+        if (marker != null)
+            marker.remove();
+        // Adds a new marker to the map
+        marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
     }
 }

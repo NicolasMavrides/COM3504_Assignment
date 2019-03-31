@@ -1,7 +1,6 @@
 /**
- * @param location TODO
  * @param username
- * @param event TODO associate to event class
+ * @param event
  * @param date
  * @param time
  * @param story
@@ -18,8 +17,8 @@ class StoryObject{
     }
 }
 
+/** Function to create a user story */
 exports.create = function (req, res) {
-    // create story object
     var storyData = req.body;
     if (storyData == null) {
         res.status(403).send('No data sent!')
@@ -40,8 +39,8 @@ exports.create = function (req, res) {
     }
 };
 
+/** Function to open a user story page given its id*/
 exports.open = function (req, res) {
-    // Open an event object
     var id = req.params.story_id;
     console.log(id);
     if (id == null) {

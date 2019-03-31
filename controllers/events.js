@@ -16,14 +16,14 @@ class EventsObject{
     }
 }
 
+/** Function to create an event */
 exports.create = function (req, res) {
-    // create event object
     var eventData = req.body;
-    console.log(eventData);
     if (eventData == null) {
         res.status(403).send('No data sent!')
     }
     try {
+        // Create an event object
         var event = new EventsObject(
             eventData.name,
             eventData.date,
@@ -33,14 +33,14 @@ exports.create = function (req, res) {
         );
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(event));
-
     } catch (e) {
         res.status(500).send('error ' + e);
     }
 };
 
+
+/** Function to open an event page given an event id*/
 exports.open = function (req, res) {
-    // Open an event object
     var id = req.params.event_id;
     console.log(id);
     if (id == null) {

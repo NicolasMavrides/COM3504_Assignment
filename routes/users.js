@@ -12,7 +12,6 @@ var users = require('../controllers/users');
 /* GET login page. */
 router.get('/login', function(req, res, next) {
   res.render('login', { title: 'My Class', login_is_correct: true });
-
 });
 
 /* POST login form. */
@@ -25,7 +24,6 @@ router.post('/login', function(req, res, next) {
   } else {
     res.render('login', { login_is_correct: false });
   }
-
 });
 
 //////////////////// Register //////////////////

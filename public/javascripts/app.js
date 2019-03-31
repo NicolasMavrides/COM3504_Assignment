@@ -104,13 +104,11 @@ function addToStories(dataR) {
         document.getElementById('stories').appendChild(row);
         // formatting the row by applying css classes
         row.classList.add('post-preview');
-        //TODO include Photo
         row.innerHTML = "<a href=''>" +
             "<h2 class='post-title'>" + getEvent(dataR) + "</h2>" +
             "<h3 class='post-subtitle'>" + getStory(dataR) + "</h3></a>" +
             "<p class='post-meta'>Posted by " + getUsername(dataR) + " on " +
-            getDate(dataR) + ", " + getTime(dataR) +
-            getPhoto(dataR) +"</p>";
+            getDate(dataR) + ", " + getTime(dataR) + "<img src="+ getPhoto(dataR) + ">";
     }
 }
 

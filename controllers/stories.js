@@ -38,3 +38,14 @@ exports.create = function (req, res) {
         res.status(500).send('error ' + e);
     }
 };
+
+/** Function open a user story page given its id*/
+exports.open = function (req, res) {
+    var id = req.params.story_id;
+    console.log(id);
+    if (id == null) {
+        res.status(403).send('No data sent!')
+    } else {
+        res.render('stories', { id: id });
+    }
+};

@@ -39,7 +39,7 @@ exports.create = function (req, res) {
 };
 
 
-/** Function to create a open an event page given an event id*/
+/** Function to open an event page given an event id*/
 exports.open = function (req, res) {
     var id = req.params.event_id;
     console.log(id);

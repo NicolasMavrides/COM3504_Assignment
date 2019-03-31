@@ -77,6 +77,7 @@ var filesToCache = [
     '/images/events-bg.jpg',
     '/images/home-bg.jpg',
     '/javascripts/app.js',
+    '/javascripts/camera.js',
     '/javascripts/clean-blog.js',
     '/javascripts/clean-blog.min.js',
     '/javascripts/database.js',
@@ -87,8 +88,8 @@ var filesToCache = [
     '/javascripts/leaflet-src.esm.js.map',
     '/javascripts/leaflet-src.js',
     '/javascripts/leaflet-src.js.map',
-    '/javascripts/map-interact.js',
     '/javascripts/login.js',
+    '/javascripts/map-interact.js',
     '/javascripts/register.js',
     '/jquery/jquery.js',
     '/jquery/jquery.min.js',
@@ -147,18 +148,17 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
     // TODO List URL's that post to server
-    //var dataUrl = '/post_story';
     //if the request is ... post to the server
     if (event.request.url.indexOf('/post_story') > -1 || event.request.url.indexOf('/post_event') > -1) {
         /*
-         * When the request URL contains dataUrl, the app is asking for fresh
+         * When the request URL contains ...., the app is asking for fresh
          * data. In this case, the service worker always goes to the
          * network and then caches the response. This is called the "Cache then
          * network" strategy:
          * https://jakearchibald.com/2014/offline-cookbook/#cache-then-network
          */
         return fetch(event.request).then(function (response) {
-            // note: it the network is down, response will contain the error
+            // note: if the network is down, response will contain the error
             // that will be passed to Ajax
             return response;
         }).catch (function(e){

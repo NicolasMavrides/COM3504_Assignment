@@ -39,7 +39,7 @@ exports.create = function (req, res) {
     }
 };
 
-/** Function open a user story page given its id*/
+/** Function to open a user story page given its id*/
 exports.open = function (req, res) {
     var id = req.params.story_id;
     console.log(id);

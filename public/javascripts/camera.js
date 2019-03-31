@@ -1,4 +1,4 @@
-// Cjeck that the browser supports GetUserMedia
+// Check that the browser supports GetUserMedia
 function hasGetUserMedia() {
     return !!(navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||

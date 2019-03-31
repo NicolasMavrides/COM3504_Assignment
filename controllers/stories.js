@@ -1,7 +1,6 @@
 /**
- * @param location TODO
  * @param username
- * @param event TODO associate to event class
+ * @param event
  * @param date
  * @param time
  * @param story
@@ -10,7 +9,7 @@
 class StoryObject{
     constructor (event, user, date, time, story, photo) {
         this.event = event;
-        this.username = username;
+        this.user = user;
         this.date = date;
         this.time = time;
         this.story = story;
@@ -18,8 +17,8 @@ class StoryObject{
     }
 }
 
+/** Function to create a user story */
 exports.create = function (req, res) {
-    // create story object
     var storyData = req.body;
     if (storyData == null) {
         res.status(403).send('No data sent!')

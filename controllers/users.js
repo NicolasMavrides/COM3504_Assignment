@@ -18,10 +18,14 @@ class UserObject{
     }
 }
 
-
+// Read sample users from json file
 var jsonData = JSON.parse(fs.readFileSync('./sample_users.json'));
 console.log(jsonData);
 
+
+/** Function to create a user
+ * Adds a new user to the json file
+ * */
 exports.create = function(req, res) {
     // create user object
     var userData = req.body;
@@ -32,10 +36,8 @@ exports.create = function(req, res) {
         var newUser = new UserObject(userData.firstname, userData.lastname, userData.email, userData.username, userData.password);
         var newUserData = { firstname:newUser.firstname, lastname:newUser.lastname, email:newUser.email, username:newUser.username, password:newUser.password };
 
-        res.setHeader('Content-Type', 'application/json');
         jsonData.push(newUserData);
         console.log(jsonData);
-        //res.send(true);
         res.redirect('/');
 
     } catch (e) {

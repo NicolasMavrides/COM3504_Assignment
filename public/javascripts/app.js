@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * Called by the HTML onload
  * initialise service worker
@@ -174,7 +173,6 @@ function showMap(){
     //Check for support
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
-        mymap.on('click', onMapClick);
     } else {
         //Generates map with default map center
         console.log("Geolocation is not supported by this browser.");
@@ -195,6 +193,7 @@ function showPosition(position){
     latLong = [position.coords.latitude, position.coords.latitude];
     //Generates map with center as users' location
     generateMap(null, latLong, null);
+    mymap.on('click', onMapClick);
 }
 
 /**

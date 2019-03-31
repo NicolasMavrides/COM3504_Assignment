@@ -148,9 +148,9 @@ function getCachedStories(name){
  * @returns {*}
  */
 function getUsername(dataR) {
-    if (dataR.username == null && dataR.username === undefined)
+    if (dataR.user == null && dataR.user === undefined)
         return "unavailable";
-    return dataR.username
+    return dataR.user
 }
 
 /**

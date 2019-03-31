@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var dataCacheName = 'eventsData-v1';
 var cacheName = 'eventsPWA';
 

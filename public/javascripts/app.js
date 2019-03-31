@@ -97,15 +97,14 @@ function addToStories(dataR) {
             "<h2 class='post-title'>" + getEvent(dataR) + "</h2>" +
             "<h3 class='post-subtitle'>" + getStory(dataR) + "</h3></a>" +
             "<p class='post-meta'>Posted by " + getUsername(dataR) + " on " +
-            getDate(dataR) + ", " + getTime(dataR) +
-            getPhoto(dataR) +"</p>";
+            getDate(dataR) + ", " + getTime(dataR) + "<img src="+ getPhoto(dataR) + ">";
     }
 }
 
 
 function loadEventData(id){
     getEventById(id, function(dataR){
-        console.log('doing');
+        console.log('loading Event data...');
         document.getElementById('title').innerHTML = getEventname(dataR);
         document.getElementById('subheading').innerHTML = getEventdescription(dataR);
         document.getElementById('date').innerHTML = getEventdate(dataR);

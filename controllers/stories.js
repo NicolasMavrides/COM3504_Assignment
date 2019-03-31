@@ -10,7 +10,7 @@
 class StoryObject{
     constructor (event, user, date, time, story, photo) {
         this.event = event;
-        this.username = username;
+        this.user = user;
         this.date = date;
         this.time = time;
         this.story = story;
@@ -37,5 +37,16 @@ exports.create = function (req, res) {
         res.send(JSON.stringify(story));
     } catch (e) {
         res.status(500).send('error ' + e);
+    }
+};
+
+exports.open = function (req, res) {
+    // Open an event object
+    var id = req.params.story_id;
+    console.log(id);
+    if (id == null) {
+        res.status(403).send('No data sent!')
+    } else {
+        res.render('stories', { id: id });
     }
 };

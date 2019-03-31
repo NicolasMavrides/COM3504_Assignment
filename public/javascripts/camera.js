@@ -48,25 +48,11 @@ function snapshot() {
     if (localMediaStream) {
         ctx.drawImage(video, 0, 0);
         document.querySelector('img').src = canvas.toDataURL('image/png');
+        var image_link = canvas.toDataURL('image/png');
+        console.log(image_link);
+        document.getElementById('photo').value = image_link;
+       // sendImage(1, image_link);
     }
-}
-
-function sendImage(userId, imageBlob) {
-    var data = {userId: userId, imageBlob: imageBlob};
-    $.ajax({
-        dataType: "json",
-        url: '/uploadpicture_app',
-        type: "POST",
-        data: data,
-        success: function (data) {
-            token = data.token;
-            // go to next picture taking
-            location.reload();
-        },
-        error: function (err) {
-            alert('Error: ' + err.status + ':' + err.statusText);
-        }
-    });
 }
 
 video.addEventListener('click', snapshot, false);
@@ -76,5 +62,3 @@ navigator.getUserMedia({video: true}, function(stream) {
     video.play();
     localMediaStream = stream;
 }, errorCallback);
-
-//sendImage(userId, canvas.toDataURL());

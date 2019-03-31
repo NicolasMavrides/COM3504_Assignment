@@ -193,6 +193,13 @@ function getStory(dataR) {
 function getPhoto(dataR) {
     if (dataR.photo == null && dataR.photo === undefined)
         return "unavailable";
+    else {
+
+
+
+
+    }
+
     return dataR.photo
 }
 

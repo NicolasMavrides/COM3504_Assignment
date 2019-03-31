@@ -35,7 +35,6 @@ exports.create = function(req, res) {
         res.setHeader('Content-Type', 'application/json');
         jsonData.push(newUserData);
         console.log(jsonData);
-        //res.send(true);
         res.redirect('/');
 
     } catch (e) {

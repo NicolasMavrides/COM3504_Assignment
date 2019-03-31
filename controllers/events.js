@@ -33,6 +33,7 @@ exports.create = function (req, res) {
         );
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(event));
+
     } catch (e) {
         res.status(500).send('error ' + e);
     }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Called by the HTML onload
  * initialise service worker

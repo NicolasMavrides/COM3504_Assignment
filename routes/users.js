@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const users = require('../controllers/users');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -7,11 +8,9 @@ router.get('/', function(req, res, next) {
 });
 
 /////////////////// Login //////////////////////
-var users = require('../controllers/users');
-
 /* GET login page. */
 router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'My Class', login_is_correct: true });
+  res.render('login', { title: 'User Login', login_is_correct: true });
 });
 
 /* POST login form. */
@@ -30,10 +29,11 @@ router.post('/login', function(req, res, next) {
 /* GET register page. */
 router.get('/register', function(req, res, next) {
   res.render('register', { login_is_correct: true });
-  console.log(users.list);
+  //console.log(users.list);
 });
 
 /* POST register form. */
-router.post('/register', users.create);
+// Register
+router.post('/register', users.createAccount);
 
 module.exports = router;

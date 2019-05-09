@@ -44,17 +44,22 @@
     </div>
 </header>
 
+<% include ./partials/messages %>
+
 <form action="register" method="POST">
     First name:<br/>
-    <input type="text" name="firstname"><br>
+    <input type="text" name="firstname" placeholder="Your name" value="<%= typeof firstname != 'undefined' ? firstname : '' %>"><br>
     Last name:<br/>
-    <input type="text" name="lastname"><br>
+    <input type="text" name="lastname" placeholder="Your surname" value="<%= typeof lastname != 'undefined' ? lastname : '' %>"><br>
     Email address:<br/>
-    <input type="text" name="email"><br>
+    <input type="text" name="email" placeholder="Your email" value="<%= typeof email != 'undefined' ? email : '' %>"><br>
     Username:<br/>
-    <input type="text" name="username"><br>
+    <input type="text" name="username" placeholder="Your username" value="<%= typeof username != 'undefined' ? username : '' %>"><br>
     Password:<br/>
-    <input type="password" name="password">
+    <input type="password" name="password" placeholder="Your password">
+    <br/>
+    Verify password:<br/>
+    <input type="password" name="password_verify" placeholder="Your password again">
     <br/>
     <input type="submit"></form>
 </form>

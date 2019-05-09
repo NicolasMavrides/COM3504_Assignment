@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('assignment:server');
 var https = require('https');
 var fs = require('fs-extra');
+var database = require('../databases/users');
 
 /**
  * Get port from environment and store in Express.

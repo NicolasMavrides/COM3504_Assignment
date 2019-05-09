@@ -68,13 +68,19 @@ exports.createAccount = function(req, res) {
                     lastname,
                     email,
                     username,
-                    password,
-                    password_verify
+                    password
                 });
 
-                newUser.save().then(user => {
+                // Use salting to encrypt the user password with bcrypt
+                bcrypt.genSalt(10, (error, salt) =>
+                    bcrypt.hash(newUser.password, salt, (error, hash) => {
+                if (error) throw error;
+
+                newUser.password = hash;      // Encrypt the new user's password
+                newUser.save().then(user => { // Save the new user account
                     res.redirect('/');
-                });
+                }).catch(error => console.log(error));
+                }));
             }
         });
     }

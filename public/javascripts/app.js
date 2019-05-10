@@ -138,7 +138,7 @@ function sendAjaxQuery(url, data, next) {
             window.location.href = next;
         },
         error: function (xhr, status, error) {
-            alert('Error: ' + error.message);
+            console.log('Error: ' + error.message);
         }
     });
 }

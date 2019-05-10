@@ -3,13 +3,13 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index');
+  res.render('index', { user : req.user });
 });
 
 
 /* GET about page. */
 router.get('/about', function(req, res, next) {
-  res.render('about');
+  res.render('about', { user : req.user });
 });
 
 //////////////////// Events //////////////////
@@ -18,7 +18,7 @@ var events = require('../controllers/events');
 
 /* GET events form */
 router.get('/create_event', function(req, res, next) {
-  res.render('event_form');
+  res.render('event_form', { user : req.user });
 });
 
 /* GET an event */
@@ -34,7 +34,7 @@ var stories = require('../controllers/stories');
 
 /* GET stories form */
 router.get('/create_story', function(req, res, next) {
-  res.render('story_form');
+  res.render('story_form', { user : req.user });
 });
 
 /* GET a story */

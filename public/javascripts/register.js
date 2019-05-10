@@ -1,3 +1,6 @@
-function checkRegistrationCorrect(criteria) {
+/*
+Unneeded for now...
+(function checkRegistrationCorrect(criteria) {
    // Javascript functions to be added later...
 }
+*/

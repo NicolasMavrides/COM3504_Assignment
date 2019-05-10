@@ -1,4 +1,4 @@
-var fs = require('fs-extra');
+// var fs = require('fs-extra'); Seems to be unneeded for now
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
@@ -12,7 +12,7 @@ const bcrypt = require('bcryptjs');
  * @constructor
  */
 
-class UserObject {
+/* class UserObject {
     constructor (firstname, lastname, email, username, password, password_verify) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -22,6 +22,7 @@ class UserObject {
         this.password_verify = password_verify;
     }
 }
+*/
 
 exports.createAccount = function(req, res) {
     const {firstname, lastname, email, username, password, password_verify} = req.body;
@@ -47,11 +48,12 @@ exports.createAccount = function(req, res) {
             password,
             password_verify
         });
-    // otherwise, check if the user account already exists
+
+        // otherwise, check if the user account already exists
     } else {
-        User.findOne({email: email}).then(user => {
+        User.findOne({$or: [ { email: email }, { username: username } ]}).then(user => {
             if (user) {                                      // if it does, re-render as before
-                errors.push({msg: 'Email already exists'});
+                errors.push({msg: 'Email or username already exists'});
                 res.render('register', {
                     errors,
                     firstname,
@@ -74,16 +76,23 @@ exports.createAccount = function(req, res) {
                 // Use salting to encrypt the user password with bcrypt
                 bcrypt.genSalt(10, (error, salt) =>
                     bcrypt.hash(newUser.password, salt, (error, hash) => {
-                if (error) throw error;
+                        if (error) throw error;
 
-                newUser.password = hash;      // Encrypt the new user's password
-                newUser.save().then(user => { // Save the new user account
-                    res.redirect('/');
-                }).catch(error => console.log(error));
-                }));
+                        newUser.password = hash;      // Encrypt the new user's password
+                        newUser.save().then(user => { // Save the new user account
+                            res.redirect('/');
+                        }).catch(error => console.log(error));
+                    })
+                );
             }
         });
     }
+};
+
+
+
+exports.login = function(req, res) {
+
 };
 
 // Read sample users from json file
@@ -91,9 +100,10 @@ exports.createAccount = function(req, res) {
 //console.log(jsonData);
 
 
+/* Unneeded for now...
 /** Function to create a user
  * Adds a new user to the json file
- * */
+ *
 exports.create = function(req, res) {
     // create user object
     var userData = req.body;
@@ -113,7 +123,8 @@ exports.create = function(req, res) {
     } catch (e) {
         res.status(500).send('error ' + e);
     }
-    */
+
 };
 
 //exports.list = jsonData;
+*/

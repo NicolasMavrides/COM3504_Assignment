@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 /////////////////// Login //////////////////////
 /* GET login page. */
 router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'User Login', login_is_correct: true });
+  res.render('login');
 });
 
 /* POST login form. */
@@ -19,16 +19,16 @@ router.post('/login', function(req, res, next) {
   var password= req.body.password;
 
   if ((users.list.some(item => item.username === login)) && (users.list.some(item => item.password === password))) {
-    res.render('index', { login_is_correct: true });
+    res.render('index');
   } else {
-    res.render('login', { login_is_correct: false });
+    res.render('login');
   }
 });
 
 //////////////////// Register //////////////////
 /* GET register page. */
 router.get('/register', function(req, res, next) {
-  res.render('register', { login_is_correct: true });
+  res.render('register');
   //console.log(users.list);
 });
 

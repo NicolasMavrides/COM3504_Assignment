@@ -1,0 +1,40 @@
+<!-- EJS Template for error, success and warning messages to be displayed on the PWA -->
+
+<% if(typeof errors != 'undefined') { %>
+    <div class="<div class=alert alert-danger alert-dismissible fade show" role="alert">
+    <% errors.forEach(function(error) { %>
+        <%= error.msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <% }); %>
+<% } %>
+
+<% if(success_msg != ''){ %>
+    <div class="<div class=alert alert-success alert-dismissible fade show" role="alert">
+        <%= success_msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<% } %>
+
+<% if(warning_msg != ''){ %>
+    <div class="<div class=alert alert-warning alert-dismissible fade show" role="alert">
+    <%= warning_msg %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+<% } %>
+
+<!-- Alert box for built-in error that comes with passport for login failure -->
+<% if(error != ''){ %>
+    <div class="<div class=alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<% } %>

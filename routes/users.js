@@ -14,26 +14,26 @@ router.get('/login', function(req, res, next) {
 });
 
 /* POST login form. */
-router.post('/login', function(req, res, next) {
-  var login= req.body.username;
-  var password= req.body.password;
+router.post('/login', users.login);
 
-  if ((users.list.some(item => item.username === login)) && (users.list.some(item => item.password === password))) {
-    res.render('index');
-  } else {
-    res.render('login');
-  }
-});
 
 //////////////////// Register //////////////////
 /* GET register page. */
 router.get('/register', function(req, res, next) {
   res.render('register');
-  //console.log(users.list);
 });
 
 /* POST register form. */
-// Register
 router.post('/register', users.createAccount);
+
+
+//////////////////// Dashboard ////////////////
+/* GET dashboard page. */
+router.get('/profile', function(req, res, next) {
+  res.render('profile');
+});
+
+/* POST dashboard page. */
+router.post('/profile', users.createAccount);
 
 module.exports = router;

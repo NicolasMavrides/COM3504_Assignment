@@ -1,7 +1,7 @@
 // var fs = require('fs-extra'); Seems to be unneeded for now
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-
+const passport = require('passport');
 
 /**
  * @param firstname
@@ -12,21 +12,9 @@ const bcrypt = require('bcryptjs');
  * @constructor
  */
 
-/* class UserObject {
-    constructor (firstname, lastname, email, username, password, password_verify) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.password_verify = password_verify;
-    }
-}
-*/
-
 exports.createAccount = function(req, res) {
-    const {firstname, lastname, email, username, password, password_verify} = req.body;
-    let errors = [];
+    const { firstname, lastname, email, username, password, password_verify } = req.body;
+    let errors = []; // list of possible errors that may occur
 
     // Validation checks on field completion and password matching
     if (!firstname || !lastname || !email || !username || !password || !password_verify) {
@@ -78,9 +66,13 @@ exports.createAccount = function(req, res) {
                     bcrypt.hash(newUser.password, salt, (error, hash) => {
                         if (error) throw error;
 
-                        newUser.password = hash;      // Encrypt the new user's password
-                        newUser.save().then(user => { // Save the new user account
-                            res.redirect('/');
+                        newUser.password = hash;         // Encrypt the new user's password
+                        newUser.save().then(account => { // Save the new user account
+                            req.flash(
+                                'success',
+                                'Your account was successfully created. You may now log in.'
+                            );
+                            res.redirect('/login');
                         }).catch(error => console.log(error));
                     })
                 );
@@ -90,41 +82,31 @@ exports.createAccount = function(req, res) {
 };
 
 
+exports.login = function(req, res, next) {
+    const { username, password } = req.body;
+    let errors = []; // list of possible errors that may occur
 
-exports.login = function(req, res) {
+    // Find the user account entered on the form
+    User.findOne({ username: username }).then(user => {
+        console.log(user);
+        if (!user) {
+            // If the account doesn't exist, push an error
+            errors.push({ msg: 'Account does not exist. Please check you have entered it correctly, or register if you do not have an account' });
 
+            res.render('login', {
+                errors,
+                username,
+                password
+            });
+        } else {
+            // User account exists, now check the password...
+            passport.authenticate('local', {
+                successRedirect: '/',
+                failureRedirect: '/login',
+                failureFlash: true
+            })(req, res, next);
+        }
+    });
 };
 
-// Read sample users from json file
-//var jsonData = JSON.parse(fs.readFileSync('./sample_users.json'));
-//console.log(jsonData);
-
-
-/* Unneeded for now...
-/** Function to create a user
- * Adds a new user to the json file
- *
-exports.create = function(req, res) {
-    // create user object
-    var userData = req.body;
-    if (userData == null) {
-        res.status(403).send('No data sent!')
-    }
-
-    /*
-    try {
-        var newUser = new UserObject(userData.firstname, userData.lastname, userData.email, userData.username, userData.password);
-        var newUserData = { firstname:newUser.firstname, lastname:newUser.lastname, email:newUser.email, username:newUser.username, password:newUser.password };
-
-        jsonData.push(newUserData);
-        console.log(jsonData);
-        res.redirect('/');
-
-    } catch (e) {
-        res.status(500).send('error ' + e);
-    }
-
-};
-
-//exports.list = jsonData;
-*/
+// Need to add dashboard, ensure-authenticated and facebook/twitter auth(?)

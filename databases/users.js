@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 // Specify DB URL
-var mongoDB = 'mongodb://localhost:27017/accounts';
+var mongoDB = 'mongodb://localhost:27017/users';
 
 // Define DB promise
 mongoose.Promise = global.Promise;

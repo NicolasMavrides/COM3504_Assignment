@@ -1,15 +1,14 @@
-var mongoose = require('mongoose');
 var User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
 exports.init_sample = function() {
 
     // remove any pre-existing init DB items to avoid duplication
-    User.remove({ username: 'TStark12' }, function(error) {
+    User.deleteOne({ username: 'TStark12' }, function(error) {
         console.log('pre-existing DB items removed');
     });
 
-    User.remove({ username: 'DrStrange' }, function(error) {
+    User.deleteOne({ username: 'DrStrange' }, function(error) {
         console.log('pre-existing DB items removed');
     });
 
@@ -54,5 +53,3 @@ exports.init_sample = function() {
         console.log(res._id);
     });
 };
-
-

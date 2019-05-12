@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 /////////////////// Login //////////////////////
 /* GET login page. */
 router.get('/login', function(req, res, next) {
-  res.render('login');
+  res.render('login', { user : req.user });
 });
 
 /* POST login form. */
@@ -34,6 +34,7 @@ router.get('/profile', function(req, res, next) {
 });
 
 /* POST dashboard page. */
-router.post('/profile', users.createAccount);
+//router.post('/profile', users.createAccount);
+
 
 module.exports = router;

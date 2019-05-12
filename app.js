@@ -10,6 +10,9 @@ var passport = require('passport');
 var app = express();
 var flash = require('connect-flash');
 
+require('./config/passport')(passport);
+var LocalStrategy = require('passport-local').Strategy;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -28,6 +31,12 @@ app.use(
     })
 );
 
+
+// initialization middleware for passport local strategy
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 // flash messages
 app.use(flash());
 
@@ -38,17 +47,18 @@ app.use(function(req, res, next) {
     next();
 });
 
-
-// initialization middleware for passport local strategy
-app.use(passport.initialize());
-app.use(passport.session());
-require('./config/passport')(passport);
-
-// routes' directory handling
 app.use(express.static(path.join(__dirname, 'public')));
 
+// routes' directory handling
 app.use('/', indexRouter);
 app.use('/', usersRouter);
+
+
+//passport config
+//var User = require('./models/user');
+//passport.use(new LocalStrategy(User.authenticate()));
+//passport.serializeUser(User.serializeUser());
+//passport.deserializeUser(User.deserializeUser());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

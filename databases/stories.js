@@ -8,8 +8,10 @@ mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB);
 
 try {
-    var connection = mongoose.createConnection(mongoDB, { useNewUrlParser: true });
+    mongoose.storiesCon = mongoose.createConnection(mongoDB, { useNewUrlParser: true });
     console.log("connection to MongoDB complete!");
 } catch (e) {
     console.log('error in connection: '+e.message)
 }
+
+module.exports = mongoose;

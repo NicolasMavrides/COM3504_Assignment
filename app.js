@@ -11,7 +11,7 @@ var app = express();
 var flash = require('connect-flash');
 
 require('./config/passport')(passport);
-var LocalStrategy = require('passport-local').Strategy;
+//var LocalStrategy = require('passport-local').Strategy;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

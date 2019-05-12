@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('../databases/stories');
 
 //TODO: Handling the photo
 const StorySchema = new mongoose.Schema({
@@ -24,6 +24,6 @@ const StorySchema = new mongoose.Schema({
     }
 });
 
-const Story = mongoose.model('Story', StorySchema);
+const Story = mongoose.storiesCon.model('Story', StorySchema);
 
 module.exports = Story;

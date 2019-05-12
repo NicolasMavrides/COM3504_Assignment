@@ -148,7 +148,7 @@ self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
     // TODO List URL's that post to server
     //if the request is ... post to the server
-    if (event.request.url.indexOf('/post_story') > -1 || event.request.url.indexOf('/post_event') > -1) {
+    if (event.request.url.indexOf('/post_story') > -1 || event.request.url.indexOf('/post_event') > -1 || event.request.url.indexOf('/refister') > -1) {
         /*
          * When the request URL contains ...., the app is asking for fresh
          * data. In this case, the service worker always goes to the

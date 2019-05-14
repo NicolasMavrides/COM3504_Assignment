@@ -1,5 +1,4 @@
 let mongoose = require('mongoose');
-
 // Specify DB URL
 var mongoDB = 'mongodb://localhost:27017/users';
 

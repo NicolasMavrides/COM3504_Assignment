@@ -13,11 +13,11 @@ const passport = require('passport');
  */
 
 exports.createAccount = function(req, res) {
-    const { firstname, lastname, email, username, password, password_verify } = req.body;
+    const { name, email, username, password, password_verify } = req.body;
     let errors = []; // list of possible errors that may occur
 
     // Validation checks on field completion and password matching
-    if (!firstname || !lastname || !email || !username || !password || !password_verify) {
+    if (!name || !email || !username || !password || !password_verify) {
         errors.push({ msg: 'You have left one or more fields empty. Please make sure to fill in all fields!' });
     } else if (password.length < 5) {
         errors.push({ msg: 'Password cannot be less than 5 characters long.' });
@@ -25,12 +25,11 @@ exports.createAccount = function(req, res) {
         errors.push( {msg: 'Passwords entered do not match, please try again.' });
     }
 
-    // Check if any errors exist. Re-render form with entered data (minus passwords) if there is
+    // Check if any errors exist. Re-render form with entered data (minus passwords) if errors exist
     if (errors.length > 0) {
         res.render('register', {
             errors,
-            firstname,
-            lastname,
+            name,
             email,
             username,
             password,
@@ -39,13 +38,12 @@ exports.createAccount = function(req, res) {
 
         // otherwise, check if the user account already exists
     } else {
-        User.findOne({$or: [ { email: email }, { username: username } ]}).then(user => {
-            if (user) {                                      // if it does, re-render as before
+        User.findOne({$or: [ { email: email }, { username: username } ]}).then(account => {
+            if (account) {                                      // if it does, re-render as before
                 errors.push({msg: 'Email or username already exists'});
                 res.render('register', {
                     errors,
-                    firstname,
-                    lastname,
+                    name,
                     email,
                     username,
                     password,
@@ -54,8 +52,7 @@ exports.createAccount = function(req, res) {
 
             } else {
                 const newUser = new User({                  // else create the new account
-                    firstname,
-                    lastname,
+                    name,
                     email,
                     username,
                     password
@@ -87,12 +84,13 @@ exports.createAccount = function(req, res) {
 exports.login = function(req, res, next) {
     const { username, password } = req.body;
     let errors = []; // list of possible errors that may occur
-    console.log(User);
+    var user = req.user;
+    //console.log(User);
 
     // Find the user account entered on the form
-    User.findOne({ username: username }).then(user => {
+    User.findOne({ username: username }).then(account => {
         console.log(user);
-        if (!user) {
+        if (!account) {
             // If the account doesn't exist, push an error
             errors.push({ msg: 'Account does not exist. Please check you have entered it correctly, or register if you do not have an account' });
 
@@ -102,14 +100,29 @@ exports.login = function(req, res, next) {
                 password
             });
         } else {
+            console.log("Start auth");
             // User account exists, now check the password...
-            passport.authenticate('local', {
-                successRedirect: '/',
-                failureRedirect: '/login',
-                failureFlash: true
-            })(req, res, next);
-        }
+                passport.authenticate('local', {
+                    successRedirect: '/',
+                    failureRedirect: '/login',
+                    failureFlash: true,
+                })(req, res, next);
+            }
     });
 };
 
-// Need to add dashboard, ensure-authenticated and facebook/twitter auth(?)
+
+exports.logout = function(req, res, next) {
+    req.logout();
+    req.flash('success', 'You have successfully logged out');
+    res.redirect('/login');
+};
+
+
+// TODO:
+// - Implement dynamic user profiles system
+// - Esure-authenticated -- edit profile
+// - socket.io notification
+// - modify User object to include avatar as field
+// - merge first and last name into name -- change the forms
+// - 

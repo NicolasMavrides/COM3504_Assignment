@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const users = require('../controllers/users');
+var passport = require('passport');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -16,6 +17,9 @@ router.get('/login', function(req, res, next) {
 /* POST login form. */
 router.post('/login', users.login);
 
+/* GET logout */
+router.get('/logout', users.logout);
+
 
 //////////////////// Register //////////////////
 /* GET register page. */
@@ -29,8 +33,9 @@ router.post('/register', users.createAccount);
 
 //////////////////// Dashboard ////////////////
 /* GET dashboard page. */
-router.get('/profile', function(req, res, next) {
-  res.render('profile');
+router.get('/profile/:id', function(req, res, next) {
+    //users.findById(req.params.id);
+    res.render('profile');
 });
 
 /* POST dashboard page. */

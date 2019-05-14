@@ -14,16 +14,14 @@ exports.init_sample = function() {
 
     // Create 2 sample users for Database init
     const IronMan = new User({                  // else create the new account
-        firstname: 'Tony',
-        lastname: 'Stark',
+        name: 'Tony Stark',
         email: 'tstark@gmail.com',
         username: 'TStark12',
         password: 'Password'
     });
 
     const DrStrange = new User({
-        firstname: 'Stephen Vincent',
-        lastname: 'Strange',
+        name: 'Stephen Vincent Strange',
         email: 'svstrange@gmail.com',
         username: 'DrStrange',
         password: 'Password'

@@ -1,5 +1,4 @@
 const LocalStrategy = require('passport-local').Strategy;
-//const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
@@ -7,7 +6,7 @@ const User = require('../models/user');
 module.exports = function(passport) {
     passport.use(
         new LocalStrategy({ usernameField: 'username', passwordField: 'password' }, (username, password, result) => {
-        // Check if the user account exists
+            // Check if the user account exists
             User.findOne({ username: username })
                 .then(account => {
                     if (!account) {  // if user account doesn't exist..

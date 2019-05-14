@@ -1,8 +1,92 @@
-<div class="card" style="width: 18rem;">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Selfie With Fame - Profile</title>
+    <link rel="manifest" href="/manifest.json">
+    <script src="/javascripts/idb.js"></script>
+
+    <!-- Stylesheet -->
+    <link href="/stylesheets/style.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
+
+
+</head>
+
+<body onload="initServiceWorker()">
+
+<% include templates/navbar.ejs %>
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('/images/events-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Nicolas Mavrides</h1>
+                    <span class="subheading">Author Profile</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <h2>About</h2>
+    <p class="text-center"><b>Email:</b> nick@gmail.com | <b>Username:</b> aca15npm</p>
+    <div class="row">
+        <div id="wrapper">
+                <img src="/images/profile_pic_blank.png" class="profile_pic" alt="...">
+                <div class="about">
+                    <p>
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+                </div>
+            <a href="#" class="btn btn-primary stories-btn">My Stories</a>
+
+        </div>
+
+        </div>
     </div>
 </div>
+
+<hr>
+
+<!-- Footer -->
+<% include templates/footer.ejs %>
+
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="/javascripts/clean-blog.min.js"></script>
+<script src="/javascripts/app.js"></script>
+<script src="/javascripts/database.js"></script>
+
+</body>
+
+</html>

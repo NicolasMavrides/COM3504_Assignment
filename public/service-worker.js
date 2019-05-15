@@ -149,7 +149,6 @@ self.addEventListener('activate', function (e) {
  */
 self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
-    // TODO List URL's that post to server
     //if the request is ... post to the server
     if (event.request.method === "POST") {
         /*

@@ -13,36 +13,58 @@ if (hasGetUserMedia()) {
     alert('getUserMedia() is not supported in your browser');
 }
 
+var width = 320;
+var height= 0;
+var video = null;
+var canvas = null;
+var photo = null;
+var button = null;
+var localMediaStream = false;
 
-var constraints = {
+let constraints = {
     audio: false,
     video: true
 };
 
-navigator.getUserMedia(constraints, function(stream) {
-    video.srcObject=stream;
-    video.play();
-    localMediaStream = stream;
-}, errorCallback);
+function startUp(){
+    video = document.getElementById('video');
+    canvas = document.getElementById('canvas');
+    photo = document.getElementById('photo');
+    button = document.getElementById('startbutton');
 
+    navigator.getUserMedia(constraints, function(stream) {
+        video.srcObject=stream;
+        video.play();
+    }, errorCallback);
 
-var video = document.querySelector('video');
-var canvas = document.querySelector('canvas');
-var ctx = canvas.getContext('2d');
-var localMediaStream = null;
+    video.addEventListener('canplay', function(ev){
+        if (!localMediaStream) {
+            height = video.videoHeight / (video.videoWidth/width);
 
-function snapshot() {
-    if (localMediaStream) {
-        ctx.drawImage(video, 0, 0);
-        document.querySelector('img').src = canvas.toDataURL('image/png');
-        var image_link = canvas.toDataURL('image/png');
-        console.log(image_link);
-        // Attach base64 image to form
-        document.getElementById('photo').value = image_link;
-    }
+            video.setAttribute('width', width);
+            video.setAttribute('height', height);
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+            localMediaStream = true;
+        }
+    }, false);
+
+    button.addEventListener('click', snapshot, false);
 }
 
-video.addEventListener('click', snapshot, false);
+function snapshot() {
+    console.log('click');
+    if (localMediaStream) {
+        var ctx = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(video, 0, 0, width, height);
+        console.log(canvas.toDataURL('image/png'));
+        var data = canvas.toDataURL('image/png');
+        photo.setAttribute('src', data);
+        document.getElementById('image').value = data;
+    }
+}
 
 function errorCallback(error) {
     console.log("navigator.getUserMedia error: ", error);

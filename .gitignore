@@ -1,3 +1,5 @@
 .idea/
 Project.iml
 node_modules
+private/images/*
+private/images/.gitkeep

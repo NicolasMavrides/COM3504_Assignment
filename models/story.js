@@ -21,6 +21,10 @@ const StorySchema = new mongoose.Schema({
     time: {
         type: String,
         required: true
+    },
+    photo: {
+        type: String,
+        required: true
     }
 });
 

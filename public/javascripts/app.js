@@ -2,7 +2,7 @@
  * Called by the HTML onload
  * initialise service worker
  */
-function initServiceWorker(eventsFound) {
+function initServiceWorker() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
             .register('./service-worker.js')
@@ -182,6 +182,7 @@ function sendAjaxQuery(url, data, next) {
         success: function (dataR) {
             if (url.indexOf('/search_event') > -1){
                 addToResults(dataR);
+                //TODO:
                 getCachedSearcedEvents();
             }
             else{

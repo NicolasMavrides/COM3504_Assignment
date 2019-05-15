@@ -22,7 +22,11 @@ router.post('/getEvents', events.getEvents);
 
 /* GET events form */
 router.get('/create_event', function(req, res, next) {
-  res.render('event_form', { user : req.user });
+    if (req.user) {
+        res.render('event_form', { user : req.user });
+    } else {
+        res.redirect('/login');
+    }
 });
 
 /* GET the search form */
@@ -48,7 +52,11 @@ router.post('/getStories', stories.getStories);
 
 /* GET stories form */
 router.get('/create_story', function(req, res, next) {
-  res.render('story_form', { user : req.user });
+    if (req.user){
+        res.render('story_form', { user : req.user });
+    } else {
+        res.redirect('/login');
+    }
 });
 
 /* GET a story */

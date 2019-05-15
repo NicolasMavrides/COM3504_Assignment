@@ -28,6 +28,7 @@ var dbPromise;
 const APP_DB_NAME = 'db_pwa_1';
 const STORIES_STORE_NAME = 'store_user_stories';
 const EVENTS_STORE_NAME = 'store_events';
+const COMMENTS_STORE_NAME = 'store_comments';
 
 /**
  * it initializes the database
@@ -42,6 +43,10 @@ function initDatabase(){
             var eventsDB = upgradeDb.createObjectStore(EVENTS_STORE_NAME, {keyPath: 'id', autoIncrement: true});
             eventsDB.createIndex('name', 'name', {unique: false, multiEntry: true});
             eventsDB.createIndex('_id', '_id', {unique: true, multiEntry: false});
+        }
+        if (!upgradeDb.objectStoreNames.contains(COMMENTS_STORE_NAME)) {
+            var commentsDB = upgradeDb.createObjectStore(COMMENTS_STORE_NAME, {keyPath: 'id', autoIncrement: true});
+            commentsDB.createIndex('event', 'event', {unique: false, multiEntry: true});
         }
     });
 }
@@ -213,6 +218,55 @@ function getCachedStories(name){
     }
 }
 
+/**
+ * TODO:
+ *}
+ */
+function getComments(id){
+    $.ajax({
+        url: '/getComments' ,
+        dataType: 'json',
+        type: 'POST',
+        data: {id: id},
+        success: function (dataR) {
+            console.log("Here is comment data:");
+            console.log(dataR);
+            dataR.forEach(data =>{
+                addToComments(data);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error.message);
+            getCachedComments(id);
+        }
+    });
+}
+
+/**
+ * TODO:
+ *}
+ */
+function getCachedComments(eventID){
+    if (dbPromise) {
+        dbPromise.then(function (db) {
+            console.log('fetching: comments for event - '+name);
+            var tx = db.transaction(COMMENTS_STORE_NAME, 'readonly');
+            var store = tx.objectStore(COMMENTS_STORE_NAME);
+            var index = store.index('event');
+            return index.getAll(IDBKeyRange.only(eventID));
+        }).then(function (itemsList) {
+            console.log(itemsList);
+            if (itemsList && itemsList.length>0 ) {
+                for (var elem in itemsList){
+                    // Adds each comment to a div on the page
+                    addToComments(itemsList[elem]);
+                }
+            }
+        }).catch(function (error) {
+            console.log('error: ' + error);
+        });
+    }
+}
 /////////////////// STORY FUNCTIONS //////////////////////
 /**
  * given the server data, it returns the value of the username
@@ -346,4 +400,15 @@ function getLongitude(dataR) {
     if (dataR.longitude == null && dataR.longitude === undefined)
         return "unavailable";
     return dataR.longitude
+}
+
+//////////////////// COMMENT FUNCTIONS //////////////////
+/**
+ * TODO:
+ *
+ */
+function getComment(dataR) {
+    if (dataR.comment == null && dataR.comment === undefined)
+        return "unavailable";
+    return dataR.comment
 }

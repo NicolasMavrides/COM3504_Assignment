@@ -43,6 +43,14 @@ router.post('/post_event', events.create);
 /* POST the search form */
 router.post('/search_event', events.search);
 
+//////////////////// Comments ////////////////////
+
+var comments = require('../controllers/comments');
+
+router.post('/getComments', comments.getComments);
+
+/* POST the comment form */
+router.post('/post_comment', comments.create);
 
 /////////////////// Stories //////////////////////
 

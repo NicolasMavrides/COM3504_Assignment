@@ -46,13 +46,17 @@ function loadEventData(id){
         document.getElementById('subheading').innerHTML = getEventdescription(dataR);
         document.getElementById('date').innerHTML = getEventdate(dataR);
         getStories(dataR.name);
+        getComments(id);
         // Add event location marker with a popup to the map
         var marker = [getLatitude(dataR), getLongitude(dataR)];
         generateMap(marker, marker, getEventname(dataR));
     })
 }
 
-
+/**
+ * TODO:
+ *}
+ */
 function loadEventList(dataR){
     console.log(dataR);
     let eventList = document.getElementById('eventList');
@@ -120,6 +124,10 @@ function addToResults(dataR) {
     });
 }
 
+/**
+ * TODO:
+ *}
+ */
 function hideResults(){
     document.getElementById('results').style.display='none';
     //Clear results
@@ -158,6 +166,25 @@ function addToStories(dataR) {
     }
 }
 
+/**
+ * TODO:
+ *}
+ */
+function addToComments(dataR){
+    if (document.getElementById('comments') != null) {
+        const row = document.createElement('div');
+        // appending a new row
+        document.getElementById('comments').appendChild(row);
+        // formatting the row by applying css classes
+        row.classList.add('media');
+        row.classList.add('mb-4');
+        const newDiv = document.createElement('div');
+        row.append(newDiv);
+        newDiv.classList.add('media-body');
+        newDiv.innerHTML = "<h5 class='mt-0'>" + getUsername(dataR) +
+            "</h5>" + getComment(dataR);
+    }
+}
 ////////////////// FORM FUNCTIONS //////////////////
 /**
  * Given a new event or story, it sends the data to the server via Ajax
@@ -171,8 +198,11 @@ function sendAjaxQuery(url, data, next) {
     if (url.indexOf('/post_story') > -1){
         store = 'store_user_stories';
     }
-    else {
+    else if ((url.indexOf('/post_event') > -1)) {
         store = 'store_events';
+    }
+    else {
+        store = 'store_comments';
     }
     $.ajax({
         url: url ,
@@ -185,13 +215,10 @@ function sendAjaxQuery(url, data, next) {
                 //TODO:
                 getCachedSearcedEvents();
             }
-            else if (dataR.errors) {
-                console.log('here');
-                res.render('event_form', { errors: dataR.errors, user : dataR.user });
-            }
             else {
                 storeCachedData(dataR, store);
-                window.location = next;
+                console.log(next);
+                //window.location = next;
             }
         },
         error: function (xhr, status, error) {
@@ -228,6 +255,10 @@ function onSubmit(url, next) {
     event.preventDefault();
 }
 
+/**
+ * TODO:
+ *}
+ */
 // Form validations
 function checkForLatLong(data){
     if (data.latitude == "" || data.longitude ==""){

@@ -4,7 +4,6 @@ const fs = require('fs');
 /** Function to create a user story */
 exports.create = function (req, res) {
     if (req.user) {
-        console.log(req.body);
         let storyData = req.body;
         if (storyData == null) {
             res.status(403).send('No data sent!')
@@ -44,11 +43,10 @@ exports.create = function (req, res) {
 /**
  * Function to retrieve all the stories from the mongoose database
  */
-exports.getStories = function getStories(req, res) {
+exports.getStories = function (req, res) {
     let eventName = req.body.name;
     console.log('fetching all stories for ' +eventName+ ' - mongoDB');
-    //TODO: Add photo
-    Story.find({event: eventName}, 'event story user date time', {sort: {date: -1, time:-1}}).exec(function (err, events) {
+    Story.find({event: eventName}, 'event story user date time photo', {sort: {date: -1, time:-1}}).exec(function (err, events) {
         if (err)
             console.log(err);
         res.send(events);
@@ -68,7 +66,7 @@ exports.open = function (req, res) {
 
 function uploadImage(user, image){
     return new Promise((resolve, reject) => {
-        targetDirectory = './private/images/' + user + '/';
+        targetDirectory = './public/user-images/' + user + '/';
         var filePath = targetDirectory + new Date().getTime();
         if (!fs.existsSync(targetDirectory)) {
             fs.mkdirSync(targetDirectory);
@@ -83,7 +81,7 @@ function uploadImage(user, image){
                 console.log(err);
             }
             console.log('The file has been saved!');
-            resolve(filePath);
+            resolve(filePath.slice(1) + '.png');
         });
     });
 }

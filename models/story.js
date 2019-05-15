@@ -1,6 +1,5 @@
 const mongoose = require('../databases/stories');
 
-//TODO: Handling the photo
 const StorySchema = new mongoose.Schema({
     event: {
         type: String,

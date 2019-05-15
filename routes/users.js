@@ -16,11 +16,14 @@ router.get('/login', function(req, res, next) {
 /* POST login form. */
 router.post('/login', users.login);
 
+/* GET logout */
+router.get('/logout', users.logout);
+
 
 //////////////////// Register //////////////////
 /* GET register page. */
 router.get('/register', function(req, res, next) {
-  res.render('register');
+  res.render('register', { user: req.user });
 });
 
 /* POST register form. */
@@ -29,9 +32,7 @@ router.post('/register', users.createAccount);
 
 //////////////////// Dashboard ////////////////
 /* GET dashboard page. */
-router.get('/profile', function(req, res, next) {
-  res.render('profile');
-});
+router.get('/profile/:username', users.loadProfile);
 
 /* POST dashboard page. */
 //router.post('/profile', users.createAccount);

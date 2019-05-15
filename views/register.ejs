@@ -46,25 +46,26 @@
 
 <% include templates/messages.ejs %>
 
-<div class="container">
-    <form action="register" method="POST">
-        First name:<br/>
-        <input type="text" name="firstname" placeholder="Your name" value="<%= typeof firstname != 'undefined' ? firstname : '' %>"><br>
-        Last name:<br/>
-        <input type="text" name="lastname" placeholder="Your surname" value="<%= typeof lastname != 'undefined' ? lastname : '' %>"><br>
-        Email address:<br/>
-        <input type="text" name="email" placeholder="Your email" value="<%= typeof email != 'undefined' ? email : '' %>"><br>
-        Username:<br/>
-        <input type="text" name="username" placeholder="Your username" value="<%= typeof username != 'undefined' ? username : '' %>"><br>
-        Password:<br/>
-        <input type="password" name="password" placeholder="Your password">
-        <br/>
-        Verify password:<br/>
-        <input type="password" name="password_verify" placeholder="Your password again">
-        <br/>
-        <input type="submit"></form>
-    </form>
-</div>
+<form action="register" method="POST">
+    Your name:<br/>
+    <input type="text" name="name" placeholder="Your name" value="<%= typeof name != 'undefined' ? name : '' %>"><br>
+    Email address:<br/>
+    <input type="text" name="email" placeholder="Your email" value="<%= typeof email != 'undefined' ? email : '' %>"><br/>
+    Username:<br/>
+    <input type="text" name="username" placeholder="Your username" value="<%= typeof username != 'undefined' ? username : '' %>"><br/>
+    Password:<br/>
+    <input type="password" name="password" placeholder="Your password">
+    <br/>
+    Verify password:<br/>
+    <input type="password" name="password_verify" placeholder="Your password again">
+    <br/>
+    Profile picture:<br/>
+    <input type="text" name="avatar">
+    <br/>
+
+    <input type="submit"></form>
+</form>
+
 <hr>
 
 <!-- Footer -->

@@ -1,8 +1,53 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
 a {
   color: #00B7FF;
+}
+
+.profile_pic {
+  width: 30%;
+  border-radius: 20%;
+  margin: 2% 5% 2% 5%;
+  float: left;
+}
+
+.about {
+  float: right;
+  width: 60%;
+  margin: 0
+}
+
+#wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.stories-btn {
+  margin: 5% 40% 5% 40%;
+  width: 300px;
+}
+
+
+h2 {
+  text-align: center;
+}
+
+@media only screen and (max-width: 793px) {
+  .profile_pic, .about, .stories-btn {
+    float: none;
+    text-align: center;
+    margin: 2% 2% 2% 2%;
+
+  }
+
+  .profile_pic {
+    width: 300px;
+  }
+
+  .about {
+    width: 90%;
+  }
+
+  #wrapper {
+    text-align: center;
+  }
+
 }

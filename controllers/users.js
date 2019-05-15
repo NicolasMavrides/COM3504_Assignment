@@ -58,7 +58,8 @@ exports.createAccount = function(req, res) {
                     name,
                     email,
                     username,
-                    password
+                    password,
+                    about: "Tell the community about yourself!"
                 });
                 console.log('received: ' + newUser);
                 // Use salting to encrypt the user password with bcrypt
@@ -119,10 +120,8 @@ exports.loadProfile = function(req, res, next) {
     var username = req.params.username;
     console.log(username);
 
-
     // Find the user account entered on the form
-    User.findOne({ username: username }, { "_id": 0, "name": 1 , "email": 1 }).then(account => {
-        //console.log(user);
+    User.findOne({ username: username }, { "_id": 0, "name": 1 , "email": 1 , "about": 1}).then(account => {
         if (!account) {
             // If the account doesn't exist, redirect user to error page with an error message
             res.render('not_found', { user: user });
@@ -130,7 +129,8 @@ exports.loadProfile = function(req, res, next) {
         } else {
             var name = account.name;
             var email = account.email;
-            res.render('profile', { name: name, email: email, username: username, user: user });
+            var about = account.about;
+            res.render('profile', { name: name, email: email, username: username, user: user, about: about });
         }
     });
 };
@@ -146,6 +146,6 @@ exports.logout = function(req, res, next) {
 
 
 // TODO:
-// - Esure-authenticated -- edit profile
+// - Esure-authenticated & edit profile fields
 // - socket.io notification
-// - modify User object to include avatar as field
+// - modify User object to include avatar as field and upload image as avatar

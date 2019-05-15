@@ -6,6 +6,10 @@ const StorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    story: {
+        type: String,
+        required: true
+    },
     user: {
         type: String,
         required: true
@@ -15,10 +19,6 @@ const StorySchema = new mongoose.Schema({
         required: true
     },
     time: {
-        type: String,
-        required: true
-    },
-    story: {
         type: String,
         required: true
     }

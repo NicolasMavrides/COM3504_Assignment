@@ -4,8 +4,15 @@ var cacheName = 'eventsPWA';
 var filesToCache = [
     '/',
     '/bootstrap/css/bootstrap.css',
+    '/bootstrap/css/bootstrap.min.css',
+    '/bootstrap/css/bootstrap-select.css',
+    '/bootstrap/css/bootstrap-select.min.css',
     '/bootstrap/js/bootstrap.bundle.js',
+    '/bootstrap/js/bootstrap.bundle.min.js',
     '/bootstrap/js/bootstrap.js',
+    '/bootstrap/js/bootstrap.min.js',
+    '/bootstrap/js/bootstrap-select.js',
+    '/bootstrap/js/bootstrap-select.min.js',
     '/fontawesome-free/css/all.css',
     '/fontawesome-free/css/brands.css',
     '/fontawesome-free/css/fontawesome.css',
@@ -85,17 +92,13 @@ var filesToCache = [
     '/javascripts/leaflet.js',
     '/javascripts/leaflet.js.map',
     '/javascripts/leaflet-src.esm.js',
-    '/javascripts/leaflet-src.esm.js.map',
     '/javascripts/leaflet-src.js',
-    '/javascripts/leaflet-src.js.map',
     '/javascripts/login.js',
     '/javascripts/register.js',
     '/jquery/jquery.js',
     '/jquery/jquery.min.js',
     '/jquery/jquery.slim.js',
     '/jquery/jquery.slim.min.js',
-    '/jquery/jquery.min.map',
-    '/jquery/jquery.slim.min.map',
     '/stylesheets/images/layers.png',
     '/stylesheets/images/layers-2x.png',
     '/stylesheets/images/marker-icon.png',
@@ -148,7 +151,7 @@ self.addEventListener('fetch', function (event) {
     console.log('[Service Worker] Fetch', event.request.url);
     // TODO List URL's that post to server
     //if the request is ... post to the server
-    if (event.request.url.indexOf('/post_story') > -1 || event.request.url.indexOf('/post_event') > -1 || event.request.url.indexOf('/refister') > -1) {
+    if (event.request.method === "POST") {
         /*
          * When the request URL contains ...., the app is asking for fresh
          * data. In this case, the service worker always goes to the
@@ -156,13 +159,23 @@ self.addEventListener('fetch', function (event) {
          * network" strategy:
          * https://jakearchibald.com/2014/offline-cookbook/#cache-then-network
          */
-        return fetch(event.request).then(function (response) {
+        event.respondWith(
+            fetch(event.request).then(function (response) {
+                // note: if the network is down, response will contain the error
+                // that will be passed to Ajax
+                return response;
+            }).catch (function(e){
+                console.log("service worker error 1: " + e.message);
+            })
+        );
+        /*return fetch(event.request).then(function (response) {
             // note: if the network is down, response will contain the error
             // that will be passed to Ajax
+            //console.log(response);
             return response;
         }).catch (function(e){
             console.log("service worker error 1: " + e.message);
-        })
+        })*/
     } else {
         /*
          * The app is asking for app shell files. In this scenario the app uses the

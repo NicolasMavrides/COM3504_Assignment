@@ -21,6 +21,8 @@
 
     <!-- Custom styles for this template -->
     <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
+
+    <link href="/bootstrap/css/bootstrap-select.min.css" rel="stylesheet">
 </head>
 
 <body onload="initServiceWorker()">
@@ -44,38 +46,43 @@
     </div>
 </header>
 
-<form id=“xForm" onsubmit="onSubmit('/post_story', '/')">
-    <div class="form-row">
-        <div class="form-group col-auto">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" name="username" placeholder="Name" value=<%= user.username %>>
+<div class="container">
+    <form id="xForm" onsubmit="onSubmit('/post_story', '/')">
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username" placeholder="Name">
+            </div>
+            <div class="form-group col-auto">
+                <label for="eventname">Event Name:</label>
+                <select id = "eventList" name="eventname" class="selectpicker show-tick" data-live-search="true" data-size="8">
+                </select>
+                <small id="eventHelpBlock" class="form-text text-muted">
+                    If your event is not listed, you can create a new event <a href="/create_event">here</a>
+                </small>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" name="date">
+            </div>
+            <div class="form-group col-auto">
+                <label for="time">Time</label>
+                <input type="time" class="form-control" name="time">
+            </div>
         </div>
         <div class="form-group col-auto">
-            <label for="eventname">Event Name:</label>
-            <input type="text" class="form-control" name="eventname">
+            <label for="story">Your Story:</label>
+            <textarea class="form-control" name="story" rows="3" placeholder="Tell us your experience of the event..."></textarea>
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-auto">
-            <label for="date">Date</label>
-            <input type="date" class="form-control" name="date">
+        <div class="form-group col-auto" style="display:none">
+            <label for="photo">Photo:</label>
+            <input type="text" class="form-control" id="photo" name="photo" placeholder="Name">
         </div>
-        <div class="form-group col-auto">
-            <label for="time">Time</label>
-            <input type="time" class="form-control" name="time">
-        </div>
-    </div>
-    <div class="form-group col-auto">
-        <label for="story">Your Story:</label>
-        <textarea class="form-control" name="story" rows="3" placeholder="Tell us your experience of the event..."></textarea>
-    </div>
-    <div class="form-group col-auto" style="display:none">
-        <label for="photo">Photo:</label>
-        <input type="text" class="form-control" id="photo" name="photo" placeholder="Name">
-    </div>
-    <button type="submit" class="btn btn-primary">Post</button>
-</form>
-
+        <button type="submit" class="btn btn-primary">Post</button>
+    </form>
+</div>
 <hr>
 
 
@@ -97,6 +104,7 @@
 <!-- Bootstrap core JavaScript -->
 <script src="/jquery/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/bootstrap/js/bootstrap-select.js"></script>
 
 <!-- Custom scripts for this template -->
 <script src="/javascripts/clean-blog.min.js"></script>

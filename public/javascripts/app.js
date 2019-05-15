@@ -2,7 +2,7 @@
  * Called by the HTML onload
  * initialise service worker
  */
-function initServiceWorker() {
+function initServiceWorker(eventsFound) {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
             .register('./service-worker.js')
@@ -16,7 +16,7 @@ function initServiceWorker() {
     // Check for support and load data
     if ('indexedDB' in window) {
         initDatabase();
-        getCachedEvents();
+        getEvents();
     }
     else {
         console.log('This browser doesn\'t support IndexedDB');
@@ -45,11 +45,23 @@ function loadEventData(id){
         document.getElementById('title').innerHTML = getEventname(dataR);
         document.getElementById('subheading').innerHTML = getEventdescription(dataR);
         document.getElementById('date').innerHTML = getEventdate(dataR);
-        getCachedStories(dataR.name);
+        getStories(dataR.name);
         // Add event location marker with a popup to the map
         var marker = [getLatitude(dataR), getLongitude(dataR)];
         generateMap(marker, marker, getEventname(dataR));
     })
+}
+
+
+function loadEventList(dataR){
+    console.log(dataR);
+    let eventList = document.getElementById('eventList');
+    if (eventList) {
+        dataR.forEach(data =>{
+            eventList.innerHTML += "<option>" + data.name+ "</option>";
+        });
+        $('#eventList').selectpicker('render');
+    }
 }
 
 /**
@@ -74,13 +86,47 @@ function addToEvents(dataR) {
         document.getElementById('events').insertBefore(row, button);
         // formatting the row by applying css classes
         row.classList.add('post-preview');
-        row.innerHTML = "<a href='/events/"+ dataR.id +"'>" +
+        row.innerHTML = "<a href='/events/"+ getID(dataR) +"'>" +
             "<h2 class='post-title'>" + getEventname(dataR) + "</h2>" +
             "<h3 class='post-subtitle'>" + getEventdescription(dataR) + "</h3></a>" +
             "<p class='post-meta'>Date: " + getEventdate(dataR) + "</p>";
     }
 }
 
+/**
+ * TODO:
+ *}
+ */
+function addToResults(dataR) {
+    document.getElementById('xForm').style.display='none';
+    let row = document.createElement('div');
+    row.innerHTML = "<div id='back_button' class='clearfix'>" +
+        "<a class='btn btn-primary float-right' onclick='hideResults()'>← Back to search</a>" +
+    "</div>";
+    document.getElementById('results').appendChild(row);
+    dataR.forEach(function(data, i){
+        row = document.createElement('div');
+        // adding a new row before the button
+        document.getElementById('results').appendChild(row);
+        // formatting the row by applying css classes
+        row.classList.add('post-preview');
+        row.innerHTML = "<a href='/events/"+ getID(data) +"'>" +
+            "<h2 class='post-title'>" + getEventname(data) + "</h2>" +
+            "<h3 class='post-subtitle'>" + getEventdescription(data) + "</h3></a>" +
+            "<p class='post-meta'>Date: " + getEventdate(data) + "</p>";
+        if (i == dataR.length -1){
+            document.getElementById('results').style.display='block';
+        }
+    });
+}
+
+function hideResults(){
+    document.getElementById('results').style.display='none';
+    //Clear results
+    document.getElementById('results').innerHTML = "";
+    document.getElementById("xForm").reset();
+    document.getElementById("xForm").style.display='block';
+}
 
 /**
  * Given the user story data returned by the server,
@@ -134,10 +180,19 @@ function sendAjaxQuery(url, data, next) {
         dataType: 'json',
         type: 'POST',
         success: function (dataR) {
-            storeCachedData(dataR, store);
-            window.location.href = next;
+            if (url.indexOf('/search_event') > -1){
+                addToResults(dataR);
+                getCachedSearcedEvents();
+            }
+            else{
+                storeCachedData(dataR, store);
+                window.location = next;
+            }
         },
         error: function (xhr, status, error) {
+            if (url.indexOf('/search_event')){
+                getCachedSearcedEvents(data);
+            }
             console.log('Error: ' + error.message);
         }
     });

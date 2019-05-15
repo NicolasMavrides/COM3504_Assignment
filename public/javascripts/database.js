@@ -41,6 +41,7 @@ function initDatabase(){
         if (!upgradeDb.objectStoreNames.contains(EVENTS_STORE_NAME)) {
             var eventsDB = upgradeDb.createObjectStore(EVENTS_STORE_NAME, {keyPath: 'id', autoIncrement: true});
             eventsDB.createIndex('name', 'name', {unique: false, multiEntry: true});
+            eventsDB.createIndex('_id', '_id', {unique: true, multiEntry: false});
         }
     });
 }
@@ -66,9 +67,32 @@ function storeCachedData(object, chosenStore) {
     }
 }
 
+/**
+ * it retrieves all the events from the mongo database
+ */
+function getEvents(){
+    $.ajax({
+        url: '/getEvents' ,
+        dataType: 'json',
+        type: 'POST',
+        success: function (dataR) {
+            console.log("Here is event data:");
+            console.log(dataR);
+            loadEventList(dataR);
+            dataR.forEach(data =>{
+                console.log(data._id);
+                addToEvents(data);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error.message);
+            getCachedEvents();
+        }
+    });
+}
 
 /**
- * it retrieves all the events from the database
+ * it retrieves all the events from the cache
  */
 function getCachedEvents() {
     if (dbPromise) {
@@ -101,7 +125,8 @@ function getEventById(id, callback){
             console.log('fetching: event'+id);
             var tx = db.transaction(EVENTS_STORE_NAME, 'readonly');
             var store = tx.objectStore(EVENTS_STORE_NAME);
-            return store.getAll(IDBKeyRange.only(id));
+            var index = store.index('_id');
+            return index.getAll(IDBKeyRange.only(id));
         }).then(function (itemsList) {
             // Expected to return only one result as id is unique in the database
             //TODO - add some checks
@@ -112,6 +137,54 @@ function getEventById(id, callback){
             console.log('error: ' + error);
         });
     }
+}
+
+/**
+ * TODO:
+ */
+function getCachedSearcedEvents(data){
+    console.log(data);
+    /*if (dbPromise) {
+        dbPromise.then(function (db) {
+            console.log('fetching: event'+id);
+            var tx = db.transaction(EVENTS_STORE_NAME, 'readonly');
+            var store = tx.objectStore(EVENTS_STORE_NAME);
+            var index = store.index('_id');
+            return index.getAll(IDBKeyRange.only(id));
+        }).then(function (itemsList) {
+            // Expected to return only one result as id is unique in the database
+            //TODO - add some checks
+            console.log(itemsList[0]);
+            // Returns the event as a callback
+            callback(itemsList[0]);
+        }).catch(function (error) {
+            console.log('error: ' + error);
+        });
+    }*/
+}
+
+/**
+ * it retrieves all stories related to an event from the mongo database
+ * @param name the name of the event associated to the user story
+ */
+function getStories(name){
+    $.ajax({
+        url: '/getStories' ,
+        dataType: 'json',
+        type: 'POST',
+        data: {name: name},
+        success: function (dataR) {
+            console.log("Here is story data:");
+            console.log(dataR);
+            dataR.forEach(data =>{
+                addToStories(data);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error.message);
+            getCachedStories(name);
+        }
+    });
 }
 
 /**
@@ -139,7 +212,6 @@ function getCachedStories(name){
         });
     }
 }
-
 
 /////////////////// STORY FUNCTIONS //////////////////////
 /**
@@ -211,6 +283,17 @@ function getPhoto(dataR) {
 
 //////////////////// EVENT FUNCTIONS //////////////////
 /**
+ * given the server data, it returns the value of id
+ * @param dataR the data returned by the server
+ * @returns {*}
+ */
+function getID(dataR) {
+    if (dataR._id == null && dataR._id === undefined)
+        return "unavailable";
+    return dataR._id
+}
+
+/**
  * given the server data, it returns the value of the name
  * @param dataR the data returned by the server
  * @returns {*}
@@ -264,5 +347,3 @@ function getLongitude(dataR) {
         return "unavailable";
     return dataR.longitude
 }
-
-//////////////////// Users //////////////////

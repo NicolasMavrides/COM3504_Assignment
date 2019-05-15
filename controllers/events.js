@@ -29,6 +29,43 @@ exports.create = function (req, res) {
     }
 };
 
+
+/**
+ * Function to retrieve all the events from the mongoose database
+ */
+exports.getEvents = function (req, res) {
+    console.log('fetching all events - mongoDB');
+    Event.find({}, 'name date description', {sort: {date: -1}}).exec(function (err, events) {
+        if (err)
+            console.log(err);
+        res.send(events);
+    });
+};
+
+/**
+ * TODO:
+ */
+exports.search = function (req, res) {
+    let eventData = req.body;
+    console.log('searching for events - mongoDB');
+    let find = {};
+    console.log(eventData.name);
+    if (eventData.name.length != 0 && eventData.date.length !=0){
+            find = {name: eventData.name, date: eventData.date};
+    } else {
+        if(eventData.name.length != 0){
+            find = {name: eventData.name};
+        } else if (eventData.date.length != 0){
+            find = {date: eventData.date};
+        }
+    }
+    Event.find(find, 'name date description', {sort: {date: -1}}).exec(function (err, events) {
+        if (err)
+            console.log(err);
+        res.send(events);
+    });
+};
+
 /** Function to open an event page given an event id*/
 exports.open = function (req, res) {
     var id = req.params.event_id;

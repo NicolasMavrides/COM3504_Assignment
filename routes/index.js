@@ -43,9 +43,12 @@ router.get('/create_story', function(req, res, next) {
 /* GET a story */
 router.get('/stories/:story_id', stories.open);
 
-
 /* POST the Story form */
 router.post('/post_story', stories.create);
 
+/* GET Not Found page */
+router.get('/not_found', function(req, res, next) {
+  res.render('not_found');
+});
 
 module.exports = router;

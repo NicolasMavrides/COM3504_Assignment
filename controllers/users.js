@@ -15,6 +15,7 @@ const passport = require('passport');
 exports.createAccount = function(req, res) {
     const { name, email, username, password, password_verify } = req.body;
     let errors = []; // list of possible errors that may occur
+    var user = req.user;
 
     // Validation checks on field completion and password matching
     if (!name || !email || !username || !password || !password_verify) {
@@ -29,6 +30,7 @@ exports.createAccount = function(req, res) {
     if (errors.length > 0) {
         res.render('register', {
             errors,
+            user: user,
             name,
             email,
             username,
@@ -43,6 +45,7 @@ exports.createAccount = function(req, res) {
                 errors.push({msg: 'Email or username already exists'});
                 res.render('register', {
                     errors,
+                    user: user,
                     name,
                     email,
                     username,
@@ -85,17 +88,16 @@ exports.login = function(req, res, next) {
     const { username, password } = req.body;
     let errors = []; // list of possible errors that may occur
     var user = req.user;
-    //console.log(User);
 
     // Find the user account entered on the form
     User.findOne({ username: username }).then(account => {
-        console.log(user);
         if (!account) {
             // If the account doesn't exist, push an error
             errors.push({ msg: 'Account does not exist. Please check you have entered it correctly, or register if you do not have an account' });
 
             res.render('login', {
                 errors,
+                user: user,
                 username,
                 password
             });
@@ -112,6 +114,29 @@ exports.login = function(req, res, next) {
 };
 
 
+exports.loadProfile = function(req, res, next) {
+    var user = req.user;
+    var username = req.params.username;
+    console.log(username);
+
+
+    // Find the user account entered on the form
+    User.findOne({ username: username }, { "_id": 0, "name": 1 , "email": 1 }).then(account => {
+        //console.log(user);
+        if (!account) {
+            // If the account doesn't exist, redirect user to error page with an error message
+            res.render('not_found', { user: user });
+
+        } else {
+            var name = account.name;
+            var email = account.email;
+            res.render('profile', { name: name, email: email, username: username, user: user });
+        }
+    });
+};
+
+
+
 exports.logout = function(req, res, next) {
     req.logout();
     req.flash('success', 'You have successfully logged out');
@@ -119,10 +144,8 @@ exports.logout = function(req, res, next) {
 };
 
 
+
 // TODO:
-// - Implement dynamic user profiles system
 // - Esure-authenticated -- edit profile
 // - socket.io notification
 // - modify User object to include avatar as field
-// - merge first and last name into name -- change the forms
-// - 

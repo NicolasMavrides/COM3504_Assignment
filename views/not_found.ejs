@@ -2,18 +2,13 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Selfie With Fame - Profile</title>
+    <title>Selfie With Fame - Log In</title>
     <link rel="manifest" href="/manifest.json">
-    <script src="/javascripts/idb.js"></script>
-
-    <!-- Stylesheet -->
-    <link href="/stylesheets/style.css" rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -25,12 +20,10 @@
 
     <!-- Custom styles for this template -->
     <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
-
-
 </head>
 
-<body onload="initServiceWorker()">
-
+<body>
+<!-- Navigation -->
 <% include templates/navbar.ejs %>
 
 <!-- Page Header -->
@@ -40,38 +33,16 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h1><%= name %></h1>
-                    <span class="subheading">Author Profile</span>
+                    <div class="container">
+                        <h2>ERROR: Resource not found!</h2>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <h2>About</h2>
-    <p class="text-center"><b>Email:</b> <%= email %> | <b>Username:</b> <%= username %></p>
-    <div class="row">
-        <div id="wrapper">
-                <img src="/images/profile_pic_blank.png" class="profile_pic" alt="...">
-                <div class="about">
-                    <p>
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                    </p>
-                </div>
-            <a href="#" class="btn btn-primary stories-btn">My Stories</a>
-
-        </div>
-
-        </div>
-    </div>
-</div>
+<p class="text-center">The user profile or other resource you have attempted to find does not exist. <a href="/">Return to the main page</a>.</p>
 
 <hr>
 
@@ -85,7 +56,6 @@
 <!-- Custom scripts for this template -->
 <script src="/javascripts/clean-blog.min.js"></script>
 <script src="/javascripts/app.js"></script>
-<script src="/javascripts/database.js"></script>
 
 </body>
 

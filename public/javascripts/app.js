@@ -217,8 +217,7 @@ function sendAjaxQuery(url, data, next) {
             }
             else {
                 storeCachedData(dataR, store);
-                console.log(next);
-                //window.location = next;
+                window.location = next;
             }
         },
         error: function (xhr, status, error) {

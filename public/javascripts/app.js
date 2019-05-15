@@ -179,13 +179,17 @@ function sendAjaxQuery(url, data, next) {
         data: data,
         dataType: 'json',
         type: 'POST',
-        success: function (dataR) {
+        success: function (dataR, res) {
             if (url.indexOf('/search_event') > -1){
                 addToResults(dataR);
                 //TODO:
                 getCachedSearcedEvents();
             }
-            else{
+            else if (dataR.errors) {
+                console.log('here');
+                res.render('event_form', { errors: dataR.errors, user : dataR.user });
+            }
+            else {
                 storeCachedData(dataR, store);
                 window.location = next;
             }
@@ -210,10 +214,39 @@ function onSubmit(url, next) {
     for (index in formArray){
         data[formArray[index].name]= formArray[index].value;
     }
-    // const data = JSON.stringify($(this).serializeArray());
-    sendAjaxQuery(url, data, next);
+    let send = true;
+    if (url.indexOf('/post_story') > -1) {
+        send = checkForPhoto(data);
+    }
+    else if (url.indexOf('/post_event') > -1) {
+        send = checkForLatLong(data);
+    }
+
+    if (send) {
+        sendAjaxQuery(url, data, next);
+    }
     event.preventDefault();
 }
+
+// Form validations
+function checkForLatLong(data){
+    if (data.latitude == "" || data.longitude ==""){
+        document.getElementById("locationAlert").style.display = "block";
+        return false;
+    }
+    return true;
+}
+
+function checkForPhoto(data){
+    console.log(!data.image);
+    console.log(data.image == "");
+    if (!data.image) {
+        document.getElementById("imageAlert").style.display = "block";
+        return false;
+    }
+    return true;
+}
+
 
 ////////////////// MAP FUNCTIONS //////////////////
 //Default map location

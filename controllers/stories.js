@@ -9,12 +9,13 @@ exports.create = function (req, res) {
         if (storyData == null) {
             res.status(403).send('No data sent!')
         }
+
         try {
             uploadImage(req.user.username, storyData.image).then((filePath) => {
                 console.log(filePath);
                 let story = new Story({
                     event: storyData.eventname,
-                    user: storyData.username,
+                    user: req.user.username,
                     date: storyData.date,
                     time: storyData.time,
                     story: storyData.story,

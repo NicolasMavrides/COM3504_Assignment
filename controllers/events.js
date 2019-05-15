@@ -7,6 +7,7 @@ exports.create = function (req, res) {
         if (eventData == null) {
             res.status(403).send('No data sent!')
         }
+
         try {
             var event = new Event({
                 name: eventData.name,
@@ -77,6 +78,6 @@ exports.open = function (req, res) {
     if (id == null) {
         res.status(403).send('No data sent!')
     } else {
-        res.render('events', { id: id });
+        res.render('events', { id: id, user: req.user});
     }
 };

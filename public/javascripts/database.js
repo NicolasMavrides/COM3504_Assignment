@@ -128,7 +128,7 @@ function getCachedEventById(id, callback){
  * Retrieves the event from the cache
  * @param data - search parameters (name and date)
  */
-function getCachedSearcedEvents(data){
+function getCachedSearchedEvents(data){
     let foundList = [];
     if (dbPromise) {
         dbPromise.then(function (db) {

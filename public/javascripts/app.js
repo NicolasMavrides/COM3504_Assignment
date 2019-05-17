@@ -89,7 +89,7 @@ function sendAjaxQuery(url, data, next) {
             // Searches for events in cache when offline
             if (url.indexOf('/search_event') > -1){
                 console.log('Falling back to cache - searching');
-                getCachedSearcedEvents(data);
+                getCachedSearchedEvents(data);
             }
         }
     });

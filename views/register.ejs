@@ -44,10 +44,9 @@
     </div>
 </header>
 
-<% include templates/messages.ejs %>
-
-<h2> Register an account </h2>
 <form action="register" method="POST">
+    <h2> Register an account </h2>
+    <% include templates/messages.ejs %>
     <div class="form-row">
         <div class="form-group col-auto">
             <label for="name">Your name:</label>
@@ -81,7 +80,6 @@
     Profile picture:<br/>
     <input type="file" name="avatar">
     <br/>
-
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 

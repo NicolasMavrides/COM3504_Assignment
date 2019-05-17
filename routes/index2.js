@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 var db = require('../controllers/db_init');
 
-db.init_sample();
-
 //////////////////// Events //////////////////
 
 var events = require('../controllers/events');

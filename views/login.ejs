@@ -46,11 +46,19 @@
 
 <div class="container">
     <form action="login" method="POST">
-        Login:<br/>
-        <input type="text" name="username" placeholder="Username" value="<%= typeof username != 'undefined' ? username : '' %>"><br>
-        Password:<br/>
-        <input type="password" name="password" placeholder="Password">
-        <br/>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="username">Login:</label>
+                <input type="text" placeholder="Username" value="<%= typeof username != 'undefined' ? username : '' %>">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="password">Password:</label>
+                <input type="password" name="password">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
         <input type="submit">
     </form>
 </div>

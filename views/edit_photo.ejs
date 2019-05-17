@@ -45,15 +45,20 @@
     </div>
 </header>
 
+<div class="container">
 <% include templates/messages.ejs %>
-<form action="upload" method="POST" enctype="multipart/form-data">
-    <h2> Upload or change your Profile Picture</h2>
-    Profile picture:<br/>
-    <input type="file" name="avatar">
-    <br/>
-    <input type="submit" class="btn-light"></form>
-</form>
-
+    <form action="upload" method="POST" enctype="multipart/form-data">
+        <h2> Upload or change your Profile Picture</h2>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="avatar">Profile picture:</label>
+                <input type="file" name="avatar">
+            </div>
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 <hr>
 
 <!-- Footer -->

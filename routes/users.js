@@ -15,9 +15,7 @@ var storage_location = multer.diskStorage({
 
 var upload = multer({
   storage: storage_location
-
 });
-
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -61,7 +59,7 @@ router.post('/edit_profile/', users.saveProfile);
 
 
 /* GET profile picture upload page */
-router.get('/edit_photo/', function(req, res, next) {
+router.get('/edit_photo', function(req, res, next) {
   var user = req.user.username;
   res.render('edit_photo', { user : user, username: user.username});
 });

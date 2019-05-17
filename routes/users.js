@@ -4,7 +4,7 @@ const users = require('../controllers/users');
 var multer = require('multer');
 var path = require('path');
 var User = require('../models/user');
-
+var { ensureAuthenticated } = require('../config/auth');
 
 var storage_location = multer.diskStorage({
   destination: './public/user-images/avatars',
@@ -52,14 +52,14 @@ router.post('/register', users.createAccount);
 router.get('/profile/:username', users.loadProfile);
 
 /* GET edit profile */
-router.get('/edit_profile/', users.editProfile);
+router.get('/edit_profile/', ensureAuthenticated, users.editProfile);
 
 /* POST edit profile */
 router.post('/edit_profile/', users.saveProfile);
 
 
 /* GET profile picture upload page */
-router.get('/edit_photo', function(req, res, next) {
+router.get('/edit_photo', ensureAuthenticated, function(req, res, next) {
   var user = req.user.username;
   res.render('edit_photo', { user : user, username: user.username});
 });

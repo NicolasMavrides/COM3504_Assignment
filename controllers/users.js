@@ -104,6 +104,8 @@ exports.login = function(req, res, next) {
     // Find the user account entered on the form
     User.findOne({ username: username }).then(account => {
         if (!account) {
+            console.log(account);
+            console.log(req.body);
             // If the account doesn't exist, push an error
             errors.push({ msg: 'Account does not exist. Please check you have entered it correctly, or register if you do not have an account' });
 

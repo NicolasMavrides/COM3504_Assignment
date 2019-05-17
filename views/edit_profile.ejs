@@ -44,12 +44,10 @@
     </div>
 </header>
 
-<% include templates/messages.ejs %>
-
 <h2> Edit your Profile details</h2>
 <% include templates/messages.ejs %>
 
-<form action="edit_profile" method="POST">
+<form action="/edit_profile" method="POST">
     Your name:<br/>
     <input type="text" name="name" placeholder="Your name" value="<%= typeof name != 'undefined' ? name : '' %>"><br>
     Email address:<br/>
@@ -57,7 +55,7 @@
     Username:<br/>
     <input type="text" name="username" placeholder="Your username" value="<%= typeof username != 'undefined' ? username : '' %>"><br/>
     About Me:<br/>
-    <input type="text" name="username" placeholder="Write something about yourself" value="<%= typeof username != 'undefined' ? about : '' %>"><br/>
+    <input type="text" name="about" placeholder="Write something about yourself" value="<%= typeof username != 'undefined' ? about : '' %>"><br/>
     Password:<br/>
     <input type="password" name="password" placeholder="Your password">
     <br/>

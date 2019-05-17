@@ -4,12 +4,19 @@ const users = require('../controllers/users');
 var multer = require('multer');
 var path = require('path');
 
+
 var storage_location = multer.diskStorage({
   destination: './public/user-images/avatars',
   filename: function(req, file, callback) {
     callback(null, req.user.username + '_' + Date.now() + path.extname(file.originalname));
   }
 });
+
+var upload = multer({
+  storage: storage_location
+
+});
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -46,10 +53,10 @@ router.post('/register', users.createAccount);
 router.get('/profile/:username', users.loadProfile);
 
 /* GET edit profile */
-router.get('/edit_profile/:username', users.editProfile);
+router.get('/edit_profile/', users.editProfile);
 
 /* POST edit profile */
-router.post('/edit_profile/:username', users.saveProfile);
+router.post('/edit_profile/', users.saveProfile);
 
 
 
@@ -62,9 +69,10 @@ router.get('/edit_photo/', function(req, res, next) {
 
 
 /* POST profile picture upload page */
-router.post('/edit_photo/upload', upload.single('avatar'), function(req, res) {
+router.post('/upload', upload.single('avatar'), function(req, res) {
   if (req.user) {
-    console.log(req.file);
+    console.log(req.file.originalname);
+    console.log("##############");
     res.redirect('/profile/' + req.user.username)
   }
   else {
@@ -75,10 +83,10 @@ router.post('/edit_photo/upload', upload.single('avatar'), function(req, res) {
 
 
 /* GET profile edit page. */
-router.get('edit_profile', users.editProfile);
+router.get('/edit_profile', users.editProfile);
 
 /* POST profile edit page. */
-router.post('edit_profile', users.saveProfile);
+router.post('/edit_profile', users.saveProfile);
 
 
 module.exports = router;

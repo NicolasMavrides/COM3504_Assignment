@@ -169,6 +169,7 @@ exports.editProfile = function(req, res, next) {
 
 
 exports.saveProfile = function(req, res, next) {
+   // var user = req.user;
     const { name, email, username, about, password, password_verify } = req.body;
 
     console.log(name);
@@ -176,7 +177,8 @@ exports.saveProfile = function(req, res, next) {
     console.log(username);
     console.log(about);
 
-    User.updateOne({username: username}, {$set:{username: username}}, function(err, result) {
+    User.updateOne({ _id : req.user._id }, {$set:{username: username}}, function(err, result) {
+        console.log(result);
         if (err)
         {
             console.log(err);
@@ -191,7 +193,7 @@ exports.saveProfile = function(req, res, next) {
             'success',
             'Profile updated successfully!.'
         );
-        res.render('profile', { name: name, email: email, username: username, about: about });
+        res.render('profile', { user: req.user, name: name, email: email, username: username, about: about });
     });
 };
 
@@ -248,5 +250,5 @@ exports.savePhoto = function(req, res, next) {
 
 // TODO:
 // - modify User object to include avatar as field and upload image as avatar
-// - Esure-authenticated & edit profile fields
+// - Esure-authenticated
 // - socket.io notification

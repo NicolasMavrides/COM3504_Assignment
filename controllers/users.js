@@ -35,7 +35,7 @@ exports.createAccount = function(req, res) {
             username,
             password,
             password_verify,
-            avatar: avatar
+            avatar: ''
         });
 
         // otherwise, check if the user account already exists
@@ -151,29 +151,27 @@ exports.loadProfile = function(req, res, next) {
 
 exports.editProfile = function(req, res, next) {
     var user = req.user;
-    var username = req.params.username;
+    var name = user.name;
+    var email = user.email;
+    var username = user.username;
+    var about = user.about;
+    res.render('edit_profile', { name: name, email: email, username: username, user: user, about: about });
+    console.log(name);
+    console.log(email);
     console.log(username);
-    console.log("#############");
+    console.log(about);
 
-
-    User.findOne({ username: username }, { "_id": 0, "name": 1 , "email": 1 , "about": 1}).then(account => {
-        if (!account) {
-            // If the account doesn't exist, redirect user to error page with an error message
-            res.render('not_found', { user: user });
-
-        } else {
-            var name = account.name;
-            var email = account.email;
-            var about = account.about;
-            res.render('edit_profile', { name: name, email: email, username: username, user: user, about: about });
-        }
-    });
 };
 
 
 exports.saveProfile = function(req, res, next) {
-    const { name, email, username, password, password_verify, about } = req.body;
+    const { name, email, username, about, password, password_verify } = req.body;
+
+    console.log(name);
+    console.log(email);
     console.log(username);
+    console.log(about);
+
     User.updateOne({username: username}, {$set:{username: username}}, function(err, result) {
         if (err)
         {
@@ -182,13 +180,14 @@ exports.saveProfile = function(req, res, next) {
                 'error',
                 'There was a problem updating your profile.'
             );
-            res.render('edit_profile/:username');
+            res.render('edit_profile');
+
         }
         req.flash(
             'success',
             'Profile updated successfully!.'
         );
-        res.redirect('profile', { name: name, email: email, username: username, about: about });
+        res.render('profile', { name: name, email: email, username: username, about: about });
     });
 };
 

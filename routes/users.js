@@ -3,17 +3,22 @@ const router = express.Router();
 const users = require('../controllers/users');
 var multer = require('multer');
 
-var storage_location = multer.diskStorage({
-  destination: './public/user_images',
-  filename: function(req, res, callback) {
-    callback(null, file.filename + '_' + Date.now() + path.extname(file.originalName));
+var upload = multer({destination: '../public/user_images'});
+
+var storage = multer.diskStorage({
+  destination: '../public/user_images',
+  filename: function(req, file, callback) {
+
   }
 });
 
-var upload = multer({
-  storage: storage_location
 
-  }).single('avatar');
+
+
+
+
+
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -59,52 +64,42 @@ router.post('/edit_profile/:username', users.saveProfile);
 
 
 /* GET profile picture upload page */
-router.get('/edit_photo/:username', function(req, res, next) {
-  var username = req.params.username;
-  res.render('edit_photo', { user : req.user, username: username});
+router.get('/edit_photo/', function(req, res, next) {
+  var user = req.user.username;
+  res.render('edit_photo', { user : user, username: user.username});
 });
 
+
 /* POST profile picture upload page */
-router.post('/edit_photo/:username/upload', upload(req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      res.render('edit_photo/' + username);
-      req.flash(
-          'error',
-          'There was a problem updating your profile.');
-    } else {
-      res.render('profile/' + username);
-      req.flash(
-          'success',
-          'Profile picture updated successfully!');
-    }
-  });
-
-// CONTINUE HERE....
-  
-module.exports = router;
-
-/*
-  console.log(req.file);
-  var username = req.params.username;
-  console.log(username);
-  res.redirect('profile/'+username);
-);
-
-
-
-
-
-
-
-
-
+router.post('/edit_photo/upload', upload.single('avatar'), (req, res) => {
+  if (!req.file) {
+    console.log("No file found");
+    return res.send({
+      success: false
+    });
+  } else {
+    console.log('file received');
+    return res.send({
+      success: true
+    })
+  }
+});
 
 /* GET profile edit page. */
-//router.get('/edit_profile/:username', users.editProfile);
+router.get('edit_profile', users.editProfile);
 
 /* POST profile edit page. */
-//router.post('edit_profile/:username', users.saveProfile);
+router.post('edit_profile', users.saveProfile);
+
+
+module.exports = router;
+
+
+
+
+
+
+
 
 /* GET profile photo edit page */
 //router.get('/edit_photo/:username/', users.editPhoto);

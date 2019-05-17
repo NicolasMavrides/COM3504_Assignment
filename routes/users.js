@@ -11,6 +11,10 @@ var storage_location = multer.diskStorage({
   }
 });
 
+var upload = multer({
+  storage: storage_location
+});
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
@@ -55,14 +59,14 @@ router.post('/edit_profile/:username', users.saveProfile);
 
 
 /* GET profile picture upload page */
-router.get('/edit_photo/', function(req, res, next) {
+router.get('/edit_photo', function(req, res, next) {
   var user = req.user.username;
   res.render('edit_photo', { user : user, username: user.username});
 });
 
 
 /* POST profile picture upload page */
-router.post('/edit_photo/upload', upload.single('avatar'), function(req, res) {
+router.post('/upload', upload.single('avatar'), function(req, res) {
   if (req.user) {
     console.log(req.file);
     res.redirect('/profile/' + req.user.username)
@@ -75,10 +79,10 @@ router.post('/edit_photo/upload', upload.single('avatar'), function(req, res) {
 
 
 /* GET profile edit page. */
-router.get('edit_profile', users.editProfile);
+router.get('/edit_profile', users.editProfile);
 
 /* POST profile edit page. */
-router.post('edit_profile', users.saveProfile);
+router.post('/edit_profile', users.saveProfile);
 
 
 module.exports = router;

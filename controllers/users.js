@@ -191,7 +191,7 @@ exports.saveProfile = function(req, res, next) {
             'success',
             'Profile updated successfully!.'
         );
-        res.render('profile', { name: name, email: email, username: username, about: about });
+        res.render('profile', { user: req.user, name: name, email: email, username: username, about: about });
     });
 };
 

@@ -46,26 +46,50 @@
 
 <% include templates/messages.ejs %>
 
+<div class="container">
 <h2> Edit your Profile details</h2>
 <% include templates/messages.ejs %>
 
-<form action="edit_profile" method="POST">
-    Your name:<br/>
-    <input type="text" name="name" placeholder="Your name" value="<%= typeof name != 'undefined' ? name : '' %>"><br>
-    Email address:<br/>
-    <input type="text" name="email" placeholder="Your email" value="<%= typeof email != 'undefined' ? email : '' %>"><br/>
-    Username:<br/>
-    <input type="text" name="username" placeholder="Your username" value="<%= typeof username != 'undefined' ? username : '' %>"><br/>
-    About Me:<br/>
-    <input type="text" name="username" placeholder="Write something about yourself" value="<%= typeof username != 'undefined' ? about : '' %>"><br/>
-    Password:<br/>
-    <input type="password" name="password" placeholder="Your password">
-    <br/>
-    Verify password:<br/>
-    <input type="password" name="password_verify" placeholder="Your password again">
-    <br/>
-    <input type="submit" class="btn-light"></form>
-</form>
+    <form action="edit_profile" method="POST">
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="name">Your name:</label>
+                <input type="text" name="name" placeholder="Your name" value="<%= typeof name != 'undefined' ? name : '' %>">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="email">Email address:</label>
+                <input type="text" name="email" placeholder="Your email" value="<%= typeof email != 'undefined' ? email : '' %>">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="username">Username:</label>
+                <input type="text" name="username" placeholder="Your username" value="<%= typeof username != 'undefined' ? username : '' %>">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="about">About Me:</label>
+                <textarea name="about" rows="3" placeholder="Write something about yourself" value="<%= typeof username != 'undefined' ? about : '' %>">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="password">Password:</label>
+                <input type="password" name="password" placeholder="Your password">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="password_verify">Verify password:</label>
+                <input type="password" name="password_verify" placeholder="Your password again">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 
 <hr>
 

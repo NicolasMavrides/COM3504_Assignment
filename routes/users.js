@@ -2,18 +2,19 @@ const express = require('express');
 const router = express.Router();
 const users = require('../controllers/users');
 var multer = require('multer');
+var path = require('path');
 
 var storage_location = multer.diskStorage({
-  destination: './public/user_images',
-  filename: function(req, res, callback) {
-    callback(null, file.filename + '_' + Date.now() + path.extname(file.originalName));
+  destination: './public/user-images/avatars',
+  filename: function(req, file, callback) {
+    callback(null, req.user.username + '_' + Date.now() + path.extname(file.originalname));
   }
 });
 
 var upload = multer({
   storage: storage_location
 
-  }).single('avatar');
+  })
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -65,20 +66,15 @@ router.get('/edit_photo/:username', function(req, res, next) {
 });
 
 /* POST profile picture upload page */
-router.post('/edit_photo/:username/upload', upload(req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      res.render('edit_photo/' + username);
-      req.flash(
-          'error',
-          'There was a problem updating your profile.');
-    } else {
-      res.render('profile/' + username);
-      req.flash(
-          'success',
-          'Profile picture updated successfully!');
-    }
-  });
+router.post('/edit_photo/upload', upload.single('avatar'), function(req, res) {
+  if (req.user) {
+    console.log(req.file);
+    res.redirect('/profile/' + req.user.username)
+  }
+  else {
+    res.redirect('/login');
+  }
+});
 
 // CONTINUE HERE....
   

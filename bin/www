@@ -52,9 +52,9 @@ server2.listen(port2);
 server2.on('error', onError);
 server2.on('listening', onListening2);
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server1);
 var socket_module = require('../socket.io/socket-io');
-socket_module.init(io, app);
+socket_module.init(io, app1);
 
 /**
  * Normalize a port into a number, string, or false.

@@ -3,12 +3,13 @@ const router = express.Router();
 const users = require('../controllers/users');
 var multer = require('multer');
 var path = require('path');
-
+var User = require('../models/user');
+var { ensureAuthenticated } = require('../config/auth');
 
 var storage_location = multer.diskStorage({
   destination: './public/user-images/avatars',
   filename: function(req, file, callback) {
-    callback(null, req.user.username + '_' + Date.now() + path.extname(file.originalname));
+    callback(null, req.user.username + path.extname(file.originalname));
   }
 });
 
@@ -51,25 +52,34 @@ router.post('/register', users.createAccount);
 router.get('/profile/:username', users.loadProfile);
 
 /* GET edit profile */
-router.get('/edit_profile', users.editProfile);
+router.get('/edit_profile/', ensureAuthenticated, users.editProfile);
 
 /* POST edit profile */
 router.post('/edit_profile', users.saveProfile);
 
 
-
-
 /* GET profile picture upload page */
-router.get('/edit_photo', function(req, res, next) {
-  res.render('edit_photo', { user : req.user, username: req.user.username});
+router.get('/edit_photo', ensureAuthenticated, function(req, res, next) {
+  var user = req.user.username;
+  res.render('edit_photo', { user : user, username: user.username});
 });
 
 
 /* POST profile picture upload page */
 router.post('/upload', upload.single('avatar'), function(req, res) {
   if (req.user) {
+    var avatar_name = req.user.username + path.extname(req.file.originalname);
     console.log(req.file.originalname);
-    console.log("##############");
+    User.updateOne({ _id : req.user._id }, {$set:{avatar: avatar_name}}, function(err, result) {
+      if (err) {
+        console.log(err);
+        req.flash(
+            'error',
+            'There was a problem updating your picture.'
+        );
+      }
+    });
+
     res.redirect('/profile/' + req.user.username)
   }
   else {
@@ -78,6 +88,22 @@ router.post('/upload', upload.single('avatar'), function(req, res) {
 });
 
 
+/*
+User.updateOne({ _id : req.user._id }, {$set:{avatar: req.file.originalname}}, function(err, result) {
+  console.log(result);
+  if (err)
+  {
+    console.log(err);
+    req.flash(
+        'error',
+        'There was a problem updating your picture.'
+    );
+    res.redirect('/profile/' + req.user.username)
+
+  }
+});
+
+*/
 
 /* GET profile edit page. */
 router.get('/edit_profile', users.editProfile);

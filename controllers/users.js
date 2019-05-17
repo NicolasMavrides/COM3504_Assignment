@@ -5,7 +5,7 @@ var email_val = require("email-validator");
 
 /** Function to create a user */
 exports.createAccount = function(req, res) {
-    const { name, email, username, password, password_verify, avatar } = req.body;
+    const { name, email, username, password, password_verify } = req.body;
     let errors = []; // list of possible errors that may occur
     var user = req.user;
     console.log(req.body);
@@ -35,7 +35,6 @@ exports.createAccount = function(req, res) {
             username,
             password,
             password_verify,
-            avatar: ''
         });
 
         // otherwise, check if the user account already exists
@@ -51,7 +50,6 @@ exports.createAccount = function(req, res) {
                     username,
                     password,
                     password_verify,
-                    avatar: avatar
                 });
 
             } else {
@@ -61,7 +59,7 @@ exports.createAccount = function(req, res) {
                     username,
                     password,
                     about: "Tell the community about yourself!",
-                    avatar: avatar
+                    avatar: ''
                 });
                 console.log('received: ' + newUser);
                 // Use salting to encrypt the user password with bcrypt
@@ -80,7 +78,6 @@ exports.createAccount = function(req, res) {
                                     username,
                                     password,
                                     password_verify,
-                                    avatar: ''
                                 })
                             }
                             req.flash(
@@ -107,6 +104,8 @@ exports.login = function(req, res, next) {
     // Find the user account entered on the form
     User.findOne({ username: username }).then(account => {
         if (!account) {
+            console.log(account);
+            console.log(req.body);
             // If the account doesn't exist, push an error
             errors.push({ msg: 'Account does not exist. Please check you have entered it correctly, or register if you do not have an account' });
 
@@ -137,7 +136,7 @@ exports.loadProfile = function(req, res, next) {
     console.log(username);
 
     // Find the user account entered on the form
-    User.findOne({ username: username }, { "_id": 0, "name": 1 , "email": 1 , "about": 1}).then(account => {
+    User.findOne({ username: username }, { "_id": 0, "name": 1 , "email": 1 , "about": 1, "avatar": 1 }).then(account => {
         if (!account) {
             // If the account doesn't exist, redirect user to error page with an error message
             res.render('not_found', { user: user });
@@ -146,7 +145,9 @@ exports.loadProfile = function(req, res, next) {
             var name = account.name;
             var email = account.email;
             var about = account.about;
-            res.render('profile', { name: name, email: email, username: username, user: user, about: about });
+            var avatar = account.avatar;
+
+            res.render('profile', { name: name, email: email, username: username, user: user, about: about, avatar: avatar });
         }
     });
 };
@@ -210,49 +211,8 @@ exports.logout = function(req, res, next) {
 
 
 
-
-
-
-
-
-   /* var username = req.params.username;
-    console.log(req.body);
-    User.updateMany({username: username}, {$set:{username: username}}, function(err, result) {
-        if (err)
-        {
-            console.log(err);
-            res.render('edit_profile/:username');
-            req.flash(
-                'error',
-                'There was a problem updating your profile.'
-            );
-        }
-        else {
-            console.log(result);
-            res.render('profile/'+username);
-        }
-    }); */
-
-
-/*
-exports.editPhoto = function(req, res, next) {
-    var user = req.user;
-    var username = req.params.username;
-    res.render('edit_photo', { name: name, email: email, username: username, user: user, about: about });
-};
-
-
-
-
-exports.savePhoto = function(req, res, next) {
-    var user = req.user;
-    var username = req.params.username;
-};
-
-*/
-
-
 // TODO:
 // - modify User object to include avatar as field and upload image as avatar
 // - Esure-authenticated
+
 // - socket.io notification

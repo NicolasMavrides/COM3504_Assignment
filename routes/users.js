@@ -4,33 +4,12 @@ const users = require('../controllers/users');
 var multer = require('multer');
 var path = require('path');
 
-<<<<<<< HEAD
-var upload = multer({destination: '../public/user_images'});
-
-var storage = multer.diskStorage({
-  destination: '../public/user_images',
-  filename: function(req, file, callback) {
-
-=======
 var storage_location = multer.diskStorage({
   destination: './public/user-images/avatars',
   filename: function(req, file, callback) {
     callback(null, req.user.username + '_' + Date.now() + path.extname(file.originalname));
->>>>>>> a48b5ad627ff1a5cdfb59a1324272e8964f1d687
   }
 });
-
-
-<<<<<<< HEAD
-
-
-
-
-
-
-=======
-  })
->>>>>>> a48b5ad627ff1a5cdfb59a1324272e8964f1d687
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {

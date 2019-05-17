@@ -1,25 +1,24 @@
-// var fs = require('fs-extra'); Seems to be unneeded for now
-const User = require('../models/user');
-const bcrypt = require('bcryptjs');
-const passport = require('passport');
+var User = require('../models/user');
+var bcrypt = require('bcryptjs');
+var passport = require('passport');
+var email_val = require("email-validator");
 
-/**
- * @param firstname
- * @param lastname
- * @param email
- * @param username
- * @param password
- * @constructor
- */
 
 exports.createAccount = function(req, res) {
-    const { name, email, username, password, password_verify } = req.body;
+    const { name, email, username, password, password_verify, avatar } = req.body;
     let errors = []; // list of possible errors that may occur
     var user = req.user;
+    console.log(req.body);
 
     // Validation checks on field completion and password matching
-    if (!name || !email || !username || !password || !password_verify) {
-        errors.push({ msg: 'You have left one or more fields empty. Please make sure to fill in all fields!' });
+    if (!name || name.length < 5) {
+        errors.push({msg: 'Please provide a name that is at least 5 characters long.'});
+    } else if (!email || !email_val.validate(email)) {
+        errors.push({msg: 'Please provide an email that is of the correct format (eg. example@email.com).'});
+    } else if (!username) {
+        errors.push({msg: 'Please fill a username.'});
+    } else if (!password || !password_verify) {
+        errors.push({msg: 'Please fill in a password and make sure it is filled in twice.'});
     } else if (password.length < 5) {
         errors.push({ msg: 'Password cannot be less than 5 characters long.' });
     } else if (password !== password_verify) {
@@ -35,7 +34,8 @@ exports.createAccount = function(req, res) {
             email,
             username,
             password,
-            password_verify
+            password_verify,
+            avatar: avatar
         });
 
         // otherwise, check if the user account already exists
@@ -50,7 +50,8 @@ exports.createAccount = function(req, res) {
                     email,
                     username,
                     password,
-                    password_verify
+                    password_verify,
+                    avatar: avatar
                 });
 
             } else {
@@ -59,18 +60,29 @@ exports.createAccount = function(req, res) {
                     email,
                     username,
                     password,
-                    about: "Tell the community about yourself!"
+                    about: "Tell the community about yourself!",
+                    avatar: avatar
                 });
                 console.log('received: ' + newUser);
                 // Use salting to encrypt the user password with bcrypt
                 bcrypt.genSalt(10, (error, salt) =>
                     bcrypt.hash(newUser.password, salt, (error, hash) => {
                         if (error) throw error;
-
                         newUser.password = hash;         // Encrypt the new user's password
                         newUser.save().then(account => { // Save the new user account
-                            console.log(account);
-                            console.log(newUser);
+                            if (error) {
+                                errors.push({ msg: err});
+                                res.render('register', {
+                                    errors,
+                                    user: user,
+                                    name,
+                                    email,
+                                    username,
+                                    password,
+                                    password_verify,
+                                    avatar: ''
+                                })
+                            }
                             req.flash(
                                 'success',
                                 'Your account was successfully created. You may now log in.'
@@ -141,6 +153,50 @@ exports.loadProfile = function(req, res, next) {
 
 
 
+exports.editProfile = function(req, res, next) {
+    var user = req.user;
+    var username = req.params.username;
+    console.log(username);
+    console.log("#############");
+
+
+    User.findOne({ username: username }, { "_id": 0, "name": 1 , "email": 1 , "about": 1}).then(account => {
+        if (!account) {
+            // If the account doesn't exist, redirect user to error page with an error message
+            res.render('not_found', { user: user });
+
+        } else {
+            var name = account.name;
+            var email = account.email;
+            var about = account.about;
+            res.render('edit_profile', { name: name, email: email, username: username, user: user, about: about });
+        }
+    });
+};
+
+
+exports.saveProfile = function(req, res, next) {
+    const { name, email, username, password, password_verify, about } = req.body;
+    console.log(username);
+    User.updateOne({username: username}, {$set:{username: username}}, function(err, result) {
+        if (err)
+        {
+            console.log(err);
+            req.flash(
+                'error',
+                'There was a problem updating your profile.'
+            );
+            res.render('edit_profile/:username');
+        }
+        req.flash(
+            'success',
+            'Profile updated successfully!.'
+        );
+        res.redirect('profile', { name: name, email: email, username: username, about: about });
+    });
+};
+
+
 exports.logout = function(req, res, next) {
     req.logout();
     req.flash('success', 'You have successfully logged out');
@@ -149,7 +205,49 @@ exports.logout = function(req, res, next) {
 
 
 
+
+
+
+
+
+   /* var username = req.params.username;
+    console.log(req.body);
+    User.updateMany({username: username}, {$set:{username: username}}, function(err, result) {
+        if (err)
+        {
+            console.log(err);
+            res.render('edit_profile/:username');
+            req.flash(
+                'error',
+                'There was a problem updating your profile.'
+            );
+        }
+        else {
+            console.log(result);
+            res.render('profile/'+username);
+        }
+    }); */
+
+
+/*
+exports.editPhoto = function(req, res, next) {
+    var user = req.user;
+    var username = req.params.username;
+    res.render('edit_photo', { name: name, email: email, username: username, user: user, about: about });
+};
+
+
+
+
+exports.savePhoto = function(req, res, next) {
+    var user = req.user;
+    var username = req.params.username;
+};
+
+*/
+
+
 // TODO:
+// - modify User object to include avatar as field and upload image as avatar
 // - Esure-authenticated & edit profile fields
 // - socket.io notification
-// - modify User object to include avatar as field and upload image as avatar

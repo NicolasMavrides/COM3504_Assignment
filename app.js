@@ -7,11 +7,33 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index1');
 var usersRouter = require('./routes/users');
 var passport = require('passport');
-var app = express();
+
+var http = require('https');
+var app = module.exports.app = express();
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);  //pass a http.Server instance
+
+io.on('connection', function(socket) {
+    socket.emit('news', {hello: 'world'});
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+});
+
 var flash = require('connect-flash');
 var user = require('./models/user');
 
 require('./config/passport')(passport);
+
+
+
+
+
+
+
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

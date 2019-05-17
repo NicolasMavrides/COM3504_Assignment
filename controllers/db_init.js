@@ -17,14 +17,16 @@ exports.init_sample = function() {
         name: 'Tony Stark',
         email: 'tstark@gmail.com',
         username: 'TStark12',
-        password: 'Password'
+        password: 'Password',
+        about: 'Known as Iron Man from the Avengers.'
     });
 
     const DrStrange = new User({
         name: 'Stephen Vincent Strange',
         email: 'svstrange@gmail.com',
         username: 'DrStrange',
-        password: 'Password'
+        password: 'Password',
+        about: 'Known as Dr Strange from the Avengers.'
     });
 
     // Use salting to encrypt sample passwords

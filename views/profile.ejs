@@ -62,7 +62,11 @@
     <p class="text-center"><b>Email:</b> <%= email %> | <b>Username:</b> <%= username %></p>
     <div class="row">
         <div id="wrapper">
+                <% if (avatar == '') { %>
                 <img src="/images/profile_pic_blank.png" class="profile_pic" alt="...">
+                <% } else { %>
+                <img src="/user-images/avatars/<%= avatar %>" class="profile_pic" alt="...">
+                <% } %>
                 <div class="about">
                     <p><%= about %></p>
                 </div>

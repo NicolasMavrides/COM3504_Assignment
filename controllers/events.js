@@ -15,7 +15,7 @@ exports.create = function (req, res) {
                 latitude: eventData.latitude,
                 longitude: eventData.longitude
             });
-            console.log('received: ' + event);
+            console.log('received event: ' + event);
 
             event.save(function (err, results) {
                 console.log(results._id);
@@ -62,6 +62,8 @@ exports.search = function (req, res) {
     let eventData = req.body;
     console.log('searching for events - mongoDB');
     let find = {};
+
+    //Checks what fields were entered
     if (eventData.name.length != 0 && eventData.date.length !=0){
             find = {name: eventData.name, date: eventData.date};
     } else {
@@ -71,6 +73,8 @@ exports.search = function (req, res) {
             find = {date: eventData.date};
         }
     }
+
+    // Returns all events if a date or name is not specified
     Event.find(find, 'name date description', {sort: {date: -1}}).exec(function (err, events) {
         if (err)
             console.log(err);
@@ -118,14 +122,12 @@ exports.open = function (req, res) {
 };
 
 /** Helper functions for working out map radius*/
-function radians_to_degrees(radians)
-{
+function radians_to_degrees(radians) {
     var pi = Math.PI;
     return radians * (180/pi);
 }
 
-function degrees_to_radians(degrees)
-{
+function degrees_to_radians(degrees) {
     var pi = Math.PI;
     return degrees * (pi/180);
 }

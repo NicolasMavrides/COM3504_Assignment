@@ -28,14 +28,14 @@
 
 <% include templates/navbar.ejs %>
 
-<script src='../socket.io/socket-io.js'></script>
+<!--<script src='../socket.io/socket-io.js'></script>
 <script>
   var socket = io.connect('http://localhost');
   socket.on('news', function(data) {
     console.log(data);
     socket.emit('my other event', {my: 'data'});
   });
-</script>
+</script>-->
 
 
 <!-- Page Header -->
@@ -79,6 +79,7 @@
 <script src="/javascripts/clean-blog.min.js"></script>
 <script src="/javascripts/app.js"></script>
 <script src="/javascripts/database.js"></script>
+<script src="/javascripts/events.js"></script>
 
 </body>
 

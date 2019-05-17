@@ -25,7 +25,6 @@
 
 <body onload="initServiceWorker()">
 
-<body>
 <!-- Navigation -->
 <% include templates/navbar.ejs %>
 
@@ -48,15 +47,16 @@
 <div class="container">
 <% include templates/messages.ejs %>
     <form action="upload" method="POST" enctype="multipart/form-data">
+        <br><br>
         <h2> Upload or change your Profile Picture</h2>
         <div class="form-row">
             <div class="form-group col-auto">
-                <label for="avatar">Profile picture:</label>
+                <label for="avatar">Profile picture:</label><br>
                 <input type="file" name="avatar">
             </div>
         </div>
         <br/>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Upload</button>
     </form>
 </div>
 <hr>

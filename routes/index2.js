@@ -1,3 +1,5 @@
+//Routes for the second server - handles communication with MongoDB
+
 var express = require('express');
 var router = express.Router();
 var db = require('../controllers/db_init');
@@ -15,21 +17,6 @@ router.get('/events/:event_id', events.open);
 /* POST the Event form */
 router.post('/post_event', events.create);
 
-/* POST the search form */
-router.post('/search_event', events.search);
-
-/* POST the map  form */
-router.post('/search_map', events.searchMap);
-
-//////////////////// Comments ////////////////////
-
-var comments = require('../controllers/comments');
-
-router.post('/getComments', comments.getComments);
-
-/* POST the comment form */
-router.post('/post_comment', comments.create);
-
 /////////////////// Stories //////////////////////
 
 var stories = require('../controllers/stories');
@@ -46,5 +33,22 @@ router.post('/post_story', stories.create);
 router.get('/not_found', function(req, res, next) {
     res.render('not_found');
 });
+
+//////////////////// Comments ////////////////////
+
+var comments = require('../controllers/comments');
+
+router.post('/getComments', comments.getComments);
+
+/* POST the comment form */
+router.post('/post_comment', comments.create);
+
+//////////////////// Search /////////////////////
+
+/* POST the search form */
+router.post('/search_event', events.search);
+
+/* POST the map  form */
+router.post('/search_map', events.searchMap);
 
 module.exports = router;

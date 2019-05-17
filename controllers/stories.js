@@ -9,17 +9,17 @@ exports.create = function (req, res) {
         }
 
         try {
-            uploadImage(req.user.username, storyData.image).then((filePath) => {
+            uploadImage(storyData.currentUser.username, storyData.image).then((filePath) => {
                 console.log(filePath);
                 let story = new Story({
                     event: storyData.eventname,
-                    user: req.user.username,
+                    user: storyData.currentUser.username,
                     date: storyData.date,
                     time: storyData.time,
                     story: storyData.story,
                     photo: filePath
                 });
-                console.log('received: ' + story);
+                console.log('received story: ' + story);
 
                 story.save(function (err, results) {
                     console.log(results._id);
@@ -37,7 +37,7 @@ exports.create = function (req, res) {
 
 
 /**
- * Function to retrieve all the stories from the mongoose database
+ * Function to retrieve all the stories for a given event from the mongoose database
  */
 exports.getStories = function (req, res) {
     let eventName = req.body.name;
@@ -49,6 +49,7 @@ exports.getStories = function (req, res) {
     });
 };
 
+//Not used
 /** Function to open a user story page given its id*/
 exports.open = function (req, res) {
     var id = req.params.story_id;

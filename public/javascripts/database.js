@@ -1,26 +1,30 @@
 ////////////////// DATABASE //////////////////
 // the database receives from the server the following structures
 /**
- * class StoryObject{
- *   constructor (event, user, date, time, story, photo) {
- *     this.event = event;
- *     this.user = user;
- *     this.date = date;
- *     this.time = time;
- *     this.story = story;
- *     this.photo = photo;
- *   }
- *}
  *
- * class EventsObject{
- *   constructor (name, date, description, latitude, longitude) {
- *     this.name = name;
- *     this.date = date;
- *     this.description = description;
- *     this.latitude = latitude;
- *     this.longitude = longitude
+ * Event Schema {
+ *     name,
+ *     date,
+ *     description,
+ *     latitude,
+ *     longitude
  *   }
- *}
+ *
+ * Story Schema {
+ *     event,
+ *     story,
+ *     user,
+ *     date,
+ *     time,
+ *     photo
+ *   }
+ *
+ * Comment Schema {
+ *     event,
+ *     user,
+ *     comment,
+ *     date
+ *   }
  */
 
 var dbPromise;
@@ -31,7 +35,7 @@ const EVENTS_STORE_NAME = 'store_events';
 const COMMENTS_STORE_NAME = 'store_comments';
 
 /**
- * it initializes the database
+ * it initializes the IndexDB database
  */
 function initDatabase(){
     dbPromise = idb.openDb(APP_DB_NAME, 1, function (upgradeDb) {
@@ -51,10 +55,11 @@ function initDatabase(){
     });
 }
 
+////////////////// CACHE -INDEXDB //////////////////
 /**
- * it saves an object (event or user story) in localStorage
- * @param object StoryObject or EVentsObject
- * @chosenStore the store name to save the object to
+ * Saves an object (event or user story) in localStorage
+ * @param object - Story, Event or Comment
+ * @param chosenStore - the store name to save the object to
  */
 function storeCachedData(object, chosenStore) {
     console.log('inserting: '+JSON.stringify(object));
@@ -73,31 +78,7 @@ function storeCachedData(object, chosenStore) {
 }
 
 /**
- * it retrieves all the events from the mongo database
- */
-function getEvents(){
-    $.ajax({
-        url: '/getEvents' ,
-        dataType: 'json',
-        type: 'POST',
-        success: function (dataR) {
-            console.log("Here is event data:");
-            console.log(dataR);
-            loadEventList(dataR);
-            dataR.forEach(data =>{
-                console.log(data._id);
-                addToEvents(data);
-            });
-        },
-        error: function (xhr, status, error) {
-            console.log('Error: ' + error.message);
-            getCachedEvents();
-        }
-    });
-}
-
-/**
- * it retrieves all the events from the cache
+ * Retrieves all the events from the cache
  */
 function getCachedEvents() {
     if (dbPromise) {
@@ -108,7 +89,6 @@ function getCachedEvents() {
             return store.openCursor();
         }).then(function allItems(cursor) {
             if (!cursor) {return;}
-            //console.log('Cursored at:', cursor.key);
 
             // Adds events to a div on the page
             addToEvents(cursor.value);
@@ -119,27 +99,9 @@ function getCachedEvents() {
     }
 }
 
-function getEventById(id){
-    $.ajax({
-        url: '/getEvent' ,
-        dataType: 'json',
-        type: 'POST',
-        data: {id: id},
-        success: function (dataR) {
-            console.log("Here is event data:");
-            console.log(dataR);
-            loadEventData(dataR);
-        },
-        error: function (xhr, status, error) {
-            console.log('Error: ' + error.message);
-            getCachedEventById(id, dataR => loadEventData(dataR));
-        }
-    });
-}
-
 /**
- * it retrieves an event from the database
- * @param id the identifier for the event in the database
+ * Retrieves an event from the cache based on ID
+ * @param id - the identifier for the event in the database
  * @param callback - callback function
  */
 function getCachedEventById(id, callback){
@@ -152,7 +114,6 @@ function getCachedEventById(id, callback){
             return index.getAll(IDBKeyRange.only(id));
         }).then(function (itemsList) {
             // Expected to return only one result as id is unique in the database
-            //TODO - add some checks
             console.log(itemsList[0]);
             // Returns the event as a callback
             callback(itemsList[0]);
@@ -163,10 +124,11 @@ function getCachedEventById(id, callback){
 }
 
 /**
- * TODO:
+ * Searches for an event based on name and date
+ * Retrieves the event from the cache
+ * @param data - search parameters (name and date)
  */
 function getCachedSearcedEvents(data){
-    console.log(data);
     let foundList = [];
     if (dbPromise) {
         dbPromise.then(function (db) {
@@ -176,8 +138,8 @@ function getCachedSearcedEvents(data){
             return store.openCursor();
         }).then(function allItems(cursor) {
             if (!cursor) {return;}
-            //console.log('Cursored at:', cursor.key);
 
+            //Checks what fields were entered and adding events to foundList
             if (data.name.length != 0 && data.date.length !=0){
                 if ((cursor.value.name == data.name) && (cursor.value.date == data.date)) {
                     foundList.push(cursor.value);
@@ -195,6 +157,7 @@ function getCachedSearcedEvents(data){
             }
             return cursor.continue().then(allItems);
         }).then(function() {
+            // Sort and add events to a div on the page
             addToResults(foundList.sort((a, b) => (a.date > b.date) ? 1 : -1));
             console.log('Done cursoring');
         });
@@ -202,32 +165,8 @@ function getCachedSearcedEvents(data){
 }
 
 /**
- * it retrieves all stories related to an event from the mongo database
- * @param name the name of the event associated to the user story
- */
-function getStories(name){
-    $.ajax({
-        url: '/getStories' ,
-        dataType: 'json',
-        type: 'POST',
-        data: {name: name},
-        success: function (dataR) {
-            console.log("Here is story data:");
-            console.log(dataR);
-            dataR.forEach(data =>{
-                addToStories(data);
-            });
-        },
-        error: function (xhr, status, error) {
-            console.log('Error: ' + error.message);
-            getCachedStories(name);
-        }
-    });
-}
-
-/**
- * it retrieves all stories related to an event
- * @param name the name of the event associated to the user story
+ * Retrieves all stories related to an event
+ * @param name - the name of the event associated to the user story
  */
 function getCachedStories(name){
     if (dbPromise) {
@@ -252,8 +191,107 @@ function getCachedStories(name){
 }
 
 /**
- * TODO:
- *}
+ * Retrieves all comments related to an event
+ * @param eventID - the identifier for the event in the database
+ */
+function getCachedComments(eventID){
+    if (dbPromise) {
+        dbPromise.then(function (db) {
+            console.log('fetching: comments for event - '+name);
+            var tx = db.transaction(COMMENTS_STORE_NAME, 'readonly');
+            var store = tx.objectStore(COMMENTS_STORE_NAME);
+            var index = store.index('event');
+            return index.getAll(IDBKeyRange.only(eventID));
+        }).then(function (itemsList) {
+            if (itemsList && itemsList.length>0 ) {
+                for (var elem in itemsList){
+                    // Adds each comment to a div on the page
+                    addToComments(itemsList[elem]);
+                }
+            }
+        }).catch(function (error) {
+            console.log('error: ' + error);
+        });
+    }
+}
+////////////////// MONGODB //////////////////
+
+/**
+ * Retrieves all the events from the mongo database
+ */
+function getEvents(){
+    $.ajax({
+        url: '/getEvents' ,
+        dataType: 'json',
+        type: 'POST',
+        success: function (dataR) {
+            console.log("Here is event data:");
+            console.log(dataR);
+            loadEventList(dataR);
+            dataR.forEach(data =>{
+                console.log(data._id);
+                addToEvents(data);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error.message);
+            console.log('Falling back to cache - getEvents');
+            getCachedEvents();
+        }
+    });
+}
+
+/**
+ * Retrieves an event from mongoDB based on ID
+ * @param id - the identifier for the event in the database
+ */
+function getEventById(id){
+    $.ajax({
+        url: '/getEvent' ,
+        dataType: 'json',
+        type: 'POST',
+        data: {id: id},
+        success: function (dataR) {
+            console.log("Here is event data:");
+            console.log(dataR);
+            loadEventData(dataR);
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error.message);
+            console.log('Falling back to cache - getEventById');
+            getCachedEventById(id, dataR => loadEventData(dataR));
+        }
+    });
+}
+
+/**
+ * Retrieves all stories related to an event from mongoDB
+ * @param name - the name of the event associated to the user story
+ */
+function getStories(name){
+    $.ajax({
+        url: '/getStories' ,
+        dataType: 'json',
+        type: 'POST',
+        data: {name: name},
+        success: function (dataR) {
+            console.log("Here is story data:");
+            console.log(dataR);
+            dataR.forEach(data =>{
+                addToStories(data);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error.message);
+            console.log('Falling back to cache - getStories');
+            getCachedStories(name);
+        }
+    });
+}
+
+/**
+ * Retrieves all comments related to an event from mongoDB
+ * @param id - the identifier for the event in the database
  */
 function getComments(id){
     $.ajax({
@@ -270,102 +308,10 @@ function getComments(id){
         },
         error: function (xhr, status, error) {
             console.log('Error: ' + error.message);
+            console.log('Falling back to cache - getComments');
             getCachedComments(id);
         }
     });
-}
-
-/**
- * TODO:
- *}
- */
-function getCachedComments(eventID){
-    if (dbPromise) {
-        dbPromise.then(function (db) {
-            console.log('fetching: comments for event - '+name);
-            var tx = db.transaction(COMMENTS_STORE_NAME, 'readonly');
-            var store = tx.objectStore(COMMENTS_STORE_NAME);
-            var index = store.index('event');
-            return index.getAll(IDBKeyRange.only(eventID));
-        }).then(function (itemsList) {
-            console.log(itemsList);
-            if (itemsList && itemsList.length>0 ) {
-                for (var elem in itemsList){
-                    // Adds each comment to a div on the page
-                    addToComments(itemsList[elem]);
-                }
-            }
-        }).catch(function (error) {
-            console.log('error: ' + error);
-        });
-    }
-}
-/////////////////// STORY FUNCTIONS //////////////////////
-/**
- * given the server data, it returns the value of the username
- * @param dataR the data returned by the server
- * @returns {*}
- */
-function getUsername(dataR) {
-    if (dataR.user == null && dataR.user === undefined)
-        return "unavailable";
-    return dataR.user
-}
-
-/**
- * given the server data, it returns the value of the event (name)
- * @param dataR the data returned by the server
- * @returns {*}
- */
-function getEvent(dataR) {
-    if (dataR.event == null && dataR.event === undefined)
-        return "unavailable";
-    return dataR.event
-}
-
-/**
- * given the server data, it returns the value of the date
- * @param dataR the data returned by the server
- * @returns {*}
- */
-function getDate(dataR) {
-    if (dataR.date == null && dataR.date === undefined)
-        return "unavailable";
-    return dataR.date
-}
-
-/**
- * given the server data, it returns the value of the time
- * @param dataR the data returned by the server
- * @returns {*}
- */
-function getTime(dataR) {
-    if (dataR.time == null && dataR.time === undefined)
-        return "unavailable";
-    return dataR.time
-}
-
-/**
- * given the server data, it returns the value of the story
- * @param dataR the data returned by the server
- * @returns {*}
- */
-function getStory(dataR) {
-    if (dataR.story == null && dataR.story === undefined)
-        return "unavailable";
-    return dataR.story
-}
-
-
-/**
- * given the server data, it returns the photo
- * @param dataR the data returned by the server
- * @returns {*}
- */
-function getPhoto(dataR) {
-    if (dataR.photo == null && dataR.photo === undefined)
-        return "unavailable";
-    return dataR.photo
 }
 
 //////////////////// EVENT FUNCTIONS //////////////////
@@ -435,10 +381,78 @@ function getLongitude(dataR) {
     return dataR.longitude
 }
 
+/////////////////// STORY FUNCTIONS //////////////////////
+/**
+ * given the server data, it returns the value of the username
+ * @param dataR the data returned by the server
+ * @returns {*}
+ */
+function getUsername(dataR) {
+    if (dataR.user == null && dataR.user === undefined)
+        return "unavailable";
+    return dataR.user
+}
+
+/**
+ * given the server data, it returns the value of the event (name)
+ * @param dataR the data returned by the server
+ * @returns {*}
+ */
+function getEvent(dataR) {
+    if (dataR.event == null && dataR.event === undefined)
+        return "unavailable";
+    return dataR.event
+}
+
+/**
+ * given the server data, it returns the value of the date
+ * @param dataR the data returned by the server
+ * @returns {*}
+ */
+function getDate(dataR) {
+    if (dataR.date == null && dataR.date === undefined)
+        return "unavailable";
+    return dataR.date
+}
+
+/**
+ * given the server data, it returns the value of the time
+ * @param dataR the data returned by the server
+ * @returns {*}
+ */
+function getTime(dataR) {
+    if (dataR.time == null && dataR.time === undefined)
+        return "unavailable";
+    return dataR.time
+}
+
+/**
+ * given the server data, it returns the value of the story
+ * @param dataR the data returned by the server
+ * @returns {*}
+ */
+function getStory(dataR) {
+    if (dataR.story == null && dataR.story === undefined)
+        return "unavailable";
+    return dataR.story
+}
+
+/**
+ * given the server data, it returns the photo
+ * @param dataR the data returned by the server
+ * @returns {*}
+ */
+function getPhoto(dataR) {
+    if (dataR.photo == null && dataR.photo === undefined)
+        return "unavailable";
+    return (dataR.photo).replace('/public', '');
+}
+
 //////////////////// COMMENT FUNCTIONS //////////////////
 /**
- * TODO:
- *
+ * given the server data, it returns the value of the comment
+ * @param dataR the data returned by the server
+ * @returns {*}
  */
 function getComment(dataR) {
     if (dataR.comment == null && dataR.comment === undefined)

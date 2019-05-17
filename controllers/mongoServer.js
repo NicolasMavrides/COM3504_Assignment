@@ -1,5 +1,9 @@
 var request = require('request');
 
+/**
+ * Function to contact the second NodeJS
+ * This second server handles interactions with MongoDB
+ */
 exports.contact = function(req, res, loginRequired) {
     let redirect = true;
     if (!loginRequired) {
@@ -9,18 +13,22 @@ exports.contact = function(req, res, loginRequired) {
             redirect = false;
         }
     }
-    var headers = {
+    const headers = {
         'User-Agent': 'PWA',
         'Content-Type': 'application/json'
     };
-    var options = {
+    let options = {
         url: 'http://localhost:3001'+req.originalUrl,
         method: 'POST',
         headers: headers,
         json: req.body
     };
 
-    if (!redirect){
+    options.json.currentUser = req.user;
+    if (redirect){
+        res.redirect('/login');
+    }
+    else {
         request(options, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 console.log("Response from MongoServer:");
@@ -32,8 +40,5 @@ exports.contact = function(req, res, loginRequired) {
                 res.status(500).send('error ' + error);
             }
         });
-    }
-    else {
-        res.redirect('/login');
     }
 };

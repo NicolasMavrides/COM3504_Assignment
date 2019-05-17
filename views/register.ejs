@@ -23,8 +23,6 @@
 </head>
 
  <body onload="initServiceWorker()">
-
-<body>
 <!-- Navigation -->
 <% include templates/navbar.ejs %>
 
@@ -44,41 +42,43 @@
     </div>
 </header>
 
-<form action="register" method="POST">
-    <h2> Register an account </h2>
-    <% include templates/messages.ejs %>
-    <div class="form-row">
-        <div class="form-group col-auto">
-            <label for="name">Your name:</label>
-            <input type="text" name="name" placeholder="Your name" value="<%= typeof name != 'undefined' ? name : '' %>">
+<div class="container">
+    <form action="register" method="POST">
+        <h2> Register an account </h2>
+        <% include templates/messages.ejs %>
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="name">Your name:</label>
+                <input type="text" name="name" placeholder="Your name" value="<%= typeof name != 'undefined' ? name : '' %>">
+            </div>
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-auto">
-            <label for="email">Email address:</label>
-            <input type="text" name="email" placeholder="Your email" value="<%= typeof email != 'undefined' ? email : '' %>">
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="email">Email address:</label>
+                <input type="text" name="email" placeholder="Your email" value="<%= typeof email != 'undefined' ? email : '' %>">
+            </div>
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-auto">
-            <label for="username">Username:</label>
-            <input type="text" name="username" placeholder="Your username" value="<%= typeof username != 'undefined' ? username : '' %>">
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="username">Username:</label>
+                <input type="text" name="username" placeholder="Your username" value="<%= typeof username != 'undefined' ? username : '' %>">
+            </div>
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-auto">
-            <label for="password">Password:</label>
-            <input type="password" name="password" placeholder="Your password">
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="password">Password:</label>
+                <input type="password" name="password" placeholder="Your password">
+            </div>
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-auto">
-            <label for="password_verify">Verify password:</label>
-            <input type="password" name="password_verify" placeholder="Your password again">
+        <div class="form-row">
+            <div class="form-group col-auto">
+                <label for="password_verify">Verify password:</label>
+                <input type="password" name="password_verify" placeholder="Your password again">
+            </div>
         </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 
 <hr>
 

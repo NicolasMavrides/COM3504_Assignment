@@ -55,7 +55,7 @@ router.get('/profile/:username', users.loadProfile);
 router.get('/edit_profile/', ensureAuthenticated, users.editProfile);
 
 /* POST edit profile */
-router.post('/edit_profile/', users.saveProfile);
+router.post('/edit_profile', users.saveProfile);
 
 
 /* GET profile picture upload page */

@@ -2,23 +2,35 @@ const express = require('express');
 const router = express.Router();
 const users = require('../controllers/users');
 var multer = require('multer');
+var path = require('path');
 
+<<<<<<< HEAD
 var upload = multer({destination: '../public/user_images'});
 
 var storage = multer.diskStorage({
   destination: '../public/user_images',
   filename: function(req, file, callback) {
 
+=======
+var storage_location = multer.diskStorage({
+  destination: './public/user-images/avatars',
+  filename: function(req, file, callback) {
+    callback(null, req.user.username + '_' + Date.now() + path.extname(file.originalname));
+>>>>>>> a48b5ad627ff1a5cdfb59a1324272e8964f1d687
   }
 });
 
 
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+  })
+>>>>>>> a48b5ad627ff1a5cdfb59a1324272e8964f1d687
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -71,19 +83,17 @@ router.get('/edit_photo/', function(req, res, next) {
 
 
 /* POST profile picture upload page */
-router.post('/edit_photo/upload', upload.single('avatar'), (req, res) => {
-  if (!req.file) {
-    console.log("No file found");
-    return res.send({
-      success: false
-    });
-  } else {
-    console.log('file received');
-    return res.send({
-      success: true
-    })
+router.post('/edit_photo/upload', upload.single('avatar'), function(req, res) {
+  if (req.user) {
+    console.log(req.file);
+    res.redirect('/profile/' + req.user.username)
+  }
+  else {
+    res.redirect('/login');
   }
 });
+
+
 
 /* GET profile edit page. */
 router.get('edit_profile', users.editProfile);

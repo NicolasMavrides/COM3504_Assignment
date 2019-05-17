@@ -4,8 +4,10 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('assignment:server');
+var app1 = require('../app');
+var app2 = require('../app2');
+var debug = require('debug')('assignment:server')
+var http = require('http');
 var https = require('https');
 var fs = require('fs-extra');
 var users = require('../databases/users');
@@ -16,8 +18,11 @@ var events = require('../databases/events');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+var port1 = normalizePort(process.env.PORT || '3000');
+app1.set('port', port1);
+
+var port2 = normalizePort(process.env.PORT || '3001');
+app2.set('port', port2);
 
 /**
  * Create HTTPs server.
@@ -32,20 +37,24 @@ var options = {
 /**
  * Create HTTPs server using the options
  */
-var server = https.createServer(options, app);
-// var server = http.createServer(app);
+var server1 = https.createServer(options, app1);
+var server2 = http.createServer(app2);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+server1.listen(port1);
+server1.on('error', onError);
+server1.on('listening', onListening1);
 
-var io = require('socket.io').listen(server);
+server2.listen(port2);
+server2.on('error', onError);
+server2.on('listening', onListening2);
+
+var io = require('socket.io').listen(server1);
 var socket_module = require('../socket.io/socket-io');
-socket_module.init(io, app);
+socket_module.init(io, app1);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -99,10 +108,18 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
-  var addr = server.address();
+function onListening1() {
+  var addr = server1.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+function onListening2() {
+  var addr = server1.address();
+  var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }

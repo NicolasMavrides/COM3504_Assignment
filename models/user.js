@@ -2,6 +2,7 @@ const mongoose = require('../databases/users');
 
 var passportLocalMongoose = require('passport-local-mongoose');
 
+//Mongoose Schema for a User
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,

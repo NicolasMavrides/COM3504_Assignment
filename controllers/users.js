@@ -96,7 +96,9 @@ exports.createAccount = function(req, res) {
     }
 };
 
-
+/**
+ * Function to login a user
+ */
 exports.login = function(req, res, next) {
     const { username, password } = req.body;
     let errors = []; // list of possible errors that may occur
@@ -126,7 +128,9 @@ exports.login = function(req, res, next) {
     });
 };
 
-
+/**
+ * Function to load a user profile
+ */
 exports.loadProfile = function(req, res, next) {
     var user = req.user;
     var username = req.params.username;

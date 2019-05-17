@@ -1,5 +1,6 @@
 const mongoose = require('../databases/stories');
 
+//Mongoose Schema for a Story
 const StorySchema = new mongoose.Schema({
     event: {
         type: String,

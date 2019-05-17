@@ -9,9 +9,9 @@ mongoose.connect(mongoDB);
 
 try {
     mongoose.eventsCon = mongoose.createConnection(mongoDB, { useNewUrlParser: true });
-    console.log("connection to MongoDB complete!");
+    console.log("connection to Events MongoDB complete!");
 } catch (e) {
-    console.log('error in connection: '+e.message)
+    console.log('error in Events DB connection: '+e.message)
 }
 
 module.exports = mongoose;

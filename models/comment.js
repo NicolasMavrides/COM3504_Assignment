@@ -1,5 +1,6 @@
 const mongoose = require('../databases/comments');
 
+//Mongoose Schema for a Comment
 const CommentSchema = new mongoose.Schema({
     event: {
         type: String,

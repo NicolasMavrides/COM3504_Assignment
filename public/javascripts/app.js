@@ -16,7 +16,6 @@ function initServiceWorker() {
     // Check for support and load data
     if ('indexedDB' in window) {
         initDatabase();
-        getEvents();
     }
     else {
         console.log('This browser doesn\'t support IndexedDB');
@@ -29,56 +28,36 @@ function initServiceWorker() {
  * For a given Event, it will retrieve all the relevant information
  * @param id the identifier for the event in the database
  * @param dataR the data returned
- * class EventsObject{
- *   constructor (name, date, description, latitude, longitude) {
- *     this.name = name;
- *     this.date = date;
- *     this.description = description;
- *     this.latitude = latitude;
- *     this.longitude = longitude
+ * Event Schema {
+ *     name,
+ *     date,
+ *     description,
+ *     latitude,
+ *     longitude
  *   }
  *}
  */
-function loadEventData(id){
-    getEventById(id, function(dataR){
-        console.log('doing');
-        document.getElementById('title').innerHTML = getEventname(dataR);
-        document.getElementById('subheading').innerHTML = getEventdescription(dataR);
-        document.getElementById('date').innerHTML = getEventdate(dataR);
-        getStories(dataR.name);
-        getComments(id);
-        // Add event location marker with a popup to the map
-        var marker = [getLatitude(dataR), getLongitude(dataR)];
-        generateMap(marker, marker, getEventname(dataR));
-    })
-}
-
-/**
- * TODO:
- *}
- */
-function loadEventList(dataR){
-    console.log(dataR);
-    let eventList = document.getElementById('eventList');
-    if (eventList) {
-        dataR.forEach(data =>{
-            eventList.innerHTML += "<option>" + data.name+ "</option>";
-        });
-        $('#eventList').selectpicker('render');
-    }
+function loadEventData(dataR){
+    document.getElementById('title').innerHTML = getEventname(dataR);
+    document.getElementById('subheading').innerHTML = getEventdescription(dataR);
+    document.getElementById('date').innerHTML = getEventdate(dataR);
+    getStories(getEventname(dataR));
+    getComments(getID(dataR));
+    // Add event location marker with a popup to the map
+    var marker = [getLatitude(dataR), getLongitude(dataR)];
+    generateMap(marker, marker, getEventname(dataR), false, defaultZoom);
 }
 
 /**
  * Given the event data returned by the server,
  * it adds a row of events to the 'events' div
  * @param dataR the data returned by the server:
- * class EventsObject{
- *   constructor (name, date, description, latitude, longitude) {
- *     this.name = name;
- *     this.date = date;
- *     this.description = description;
- *     this.latitude = latitude;
- *     this.longitude = longitude
+ * Event Schema {
+ *     name,
+ *     date,
+ *     description,
+ *     latitude,
+ *     longitude
  *   }
  *}
  */
@@ -98,11 +77,43 @@ function addToEvents(dataR) {
 }
 
 /**
- * TODO:
+ * Given the event data returned by the server,
+ * it adds the event names to the dropdown select on the story form
+ * @param dataR the data returned by the server:
+ * Event Schema {
+ *     name,
+ *     date,
+ *     description,
+ *     latitude,
+ *     longitude
+ *   }
+ *}
+ */
+function loadEventList(dataR){
+    let eventList = document.getElementById('eventList');
+    if (eventList) {
+        dataR.forEach(data =>{
+            eventList.innerHTML += "<option>" + data.name+ "</option>";
+        });
+        $('#eventList').selectpicker('render');
+    }
+}
+
+/**
+ * Given the searched events returned by the server,
+ * it adds a row of events to the 'results' div
+ * @param dataR the data returned by the server - list of events:
+ * Event Schema {
+ *     name,
+ *     date,
+ *     description,
+ *     latitude,
+ *     longitude
+ *   }
  *}
  */
 function addToResults(dataR) {
-    document.getElementById('xForm').style.display='none';
+    document.getElementById('search-text').style.display='none';
     let row = document.createElement('div');
     row.innerHTML = "<div id='back_button' class='clearfix'>" +
         "<a class='btn btn-primary float-right' onclick='hideResults()'>← Back to search</a>" +
@@ -124,16 +135,32 @@ function addToResults(dataR) {
     });
 }
 
+function showMapSearch(){
+    document.getElementById("search-text").style.display='none';
+    document.getElementById('search-map').style.display='block';
+}
+
+function showNormalSearch(){
+    document.getElementById("search-map").style.display='none';
+    document.getElementById('search-text').style.display='block';
+}
+
 /**
- * TODO:
+ * Function to
  *}
  */
 function hideResults(){
     document.getElementById('results').style.display='none';
+    document.getElementById('mapSection').style.display='none';
+    if (mymap) {
+        mymap.remove();
+    }
     //Clear results
     document.getElementById('results').innerHTML = "";
-    document.getElementById("xForm").reset();
-    document.getElementById("xForm").style.display='block';
+    document.getElementById("search-text").reset();
+    document.getElementById('search-map').reset();
+    showNormalSearch();
+    document.getElementById("form-group").style.display='block';
 }
 
 /**
@@ -158,11 +185,17 @@ function addToStories(dataR) {
         document.getElementById('stories').appendChild(row);
         // formatting the row by applying css classes
         row.classList.add('post-preview');
-        row.innerHTML = "<a href=''>" +
+        row.classList.add('media');
+        row.classList.add('mb-4');
+        row.innerHTML = "<img class='d-flex mr-3' src="+ getPhoto(dataR) + " alt=''>";
+        const newDiv = document.createElement('div');
+        row.append(newDiv);
+        newDiv.classList.add('media-body');
+        newDiv.innerHTML = "<a href=''>" +
             "<h2 class='post-title'>" + getEvent(dataR) + "</h2>" +
             "<h3 class='post-subtitle'>" + getStory(dataR) + "</h3></a>" +
             "<p class='post-meta'>Posted by " + getUsername(dataR) + " on " +
-            getDate(dataR) + ", " + getTime(dataR) + "<img src="+ getPhoto(dataR) + ">";
+            getDate(dataR) + ", " + getTime(dataR) + "</p>";
     }
 }
 
@@ -210,22 +243,26 @@ function sendAjaxQuery(url, data, next) {
         data: data,
         dataType: 'json',
         type: 'POST',
-        success: function (dataR, res) {
+        success: function (dataR) {
             if (url.indexOf('/search_event') > -1){
                 addToResults(dataR);
-                //TODO:
-                getCachedSearcedEvents();
+            }
+            else if (url.indexOf('/search_map') > -1){
+                let center = [data.latitude, data.longitude];
+                document.getElementById("search-map").style.display = 'none';
+                document.getElementById('mapSection').style.display = 'block';
+                generateMap(dataR, center, null, true, 11);
             }
             else {
                 storeCachedData(dataR, store);
                 window.location = next;
             }
         },
-        error: function (xhr, status, error) {
-            if (url.indexOf('/search_event')){
+        error: function (xhr, status, error){
+            console.log('Error: ' + error.message);
+            if (url.indexOf('/search_event') > -1){
                 getCachedSearcedEvents(data);
             }
-            console.log('Error: ' + error.message);
         }
     });
 }
@@ -245,7 +282,7 @@ function onSubmit(url, next) {
     if (url.indexOf('/post_story') > -1) {
         send = checkForPhoto(data);
     }
-    else if (url.indexOf('/post_event') > -1) {
+    else if (url.indexOf('/post_event') > -1 || url.indexOf('/search_eventMap') > -1) {
         send = checkForLatLong(data);
     }
 
@@ -278,12 +315,12 @@ function checkForPhoto(data){
     return true;
 }
 
-
 ////////////////// MAP FUNCTIONS //////////////////
 //Default map location
 var latLong = [51.505, -0.09];
 var mymap;
 var marker;
+const defaultZoom = 13;
 
 /**
  * Function to reveal the hidden Map
@@ -296,7 +333,7 @@ function showMap(){
     } else {
         //Generates map with default map center
         console.log("Geolocation is not supported by this browser.");
-        generateMap(null, latLong, null);
+        generateMap(null, latLong, null, false, defaultZoom);
         mymap.on('click', onMapClick);
     }
     document.getElementById('mapSection').style.display='block';
@@ -312,7 +349,7 @@ function showPosition(position){
         "Longitude: " + position.coords.latitude);
     latLong = [position.coords.latitude, position.coords.latitude];
     //Generates map with center as users' location
-    generateMap(null, latLong, null);
+    generateMap(null, latLong, null, false, defaultZoom);
     mymap.on('click', onMapClick);
 }
 
@@ -344,7 +381,7 @@ function showError(error) {
  * @param center the latitude and longitude to center the map on
  * @param eventName name of the event to add to a marker popup
  */
-function generateMap(marker, center, eventName){
+function generateMap(marker, center, eventName, multi, zoom){
     const mapBoxKey = 'pk.eyJ1IjoiaW5pZ2VuYTEiLCJhIjoiY2p0c2tyN2Q0MHEwazQ0cW5nYXdweTY0YSJ9.OsacubTngg18fAn4BBx0ig';
     // Mapbox Streets tile layer
     var streets = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -364,7 +401,7 @@ function generateMap(marker, center, eventName){
     // Initialize the map
     mymap = L.map('mapid',{
         center: center,
-        zoom: 13,
+        zoom: zoom,
         layers: [satellite, streets]
     });
 
@@ -382,8 +419,22 @@ function generateMap(marker, center, eventName){
     L.control.scale().addTo(mymap);
 
     // Add a marker to the map
-    if (marker!=null) {
+    if (!multi && marker!=null) {
         L.marker(marker).addTo(mymap).bindPopup('<b>'+eventName+'</b>');
+    } else if (multi){
+        L.circle(center, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.2,
+            radius: 10000
+        }).addTo(mymap);
+        marker.forEach(function(data) {
+            let html = "<b><a href='/events/"+ getID(data) +"'>" + getEventname(data) +
+                '</a></b><br>'+getEventdate(data);
+            console.log(html);
+            let location = [getLatitude(data), getLongitude(data)];
+            L.marker(location).addTo(mymap).bindPopup(html);
+        });
     }
 }
 

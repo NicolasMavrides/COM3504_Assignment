@@ -20,6 +20,10 @@
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
+    <!-- Leaflet Map Javascript and stylesheet -->
+    <link rel="stylesheet" href="/stylesheets/leaflet.css" />
+    <script src="/javascripts/leaflet.js"></script>
+
     <!-- Custom styles for this template -->
     <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
 </head>
@@ -44,37 +48,60 @@
 </header>
 
 <div class="container">
-    <form id="xForm" onsubmit="onSubmit('/search_event', '/')">
-        <div class="form-row">
-            <div class="form-group col-auto">
-                <label for="name">Event Name:</label>
-                <input type="text" class="form-control" name="name" placeholder="Name">
+    <div id="form-group">
+        <form  id="search-text" onsubmit="onSubmit('/search_event', '/')">
+            <div class="form-row">
+                <div class="form-group col-auto">
+                    <label for="name">Event Name:</label>
+                    <input type="text" class="form-control" name="name" placeholder="Name">
+                </div>
+                <div class="form-group col-auto">
+                    <label for="date">Date: </label>
+                    <input type="date" class="form-control" name="date">
+                </div>
             </div>
-            <div class="form-group col-auto">
-                <label for="date">Date: </label>
-                <input type="date" class="form-control" name="date">
+            <!-- TODO: Search by map -->
+            <button type="button" onclick="showMapSearch()" class="btn-outline-success btn-sm">Search by Location</button>
+            <br><br>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <form  id="search-map" style="display: none" onsubmit="onSubmit('/search_map', '/')">
+            <!-- Validation -->
+            <div class="<div class=alert alert-danger alert-dismissible fade show" role="alert" id="locationAlert" style="display:none;">
+                Please add location information
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
-        <!-- TODO: Search by map -->
-        <!--<button type="button" onclick="showMap()" class="btn-outline-success btn-sm">Add Location</button>
-        <br><br>
-        <div id="mapSection" style="display: none">
             <div class="form-row">
                 <div class="form-group col-auto">
                     <label for="latitude">Latitude:</label>
-                    <input type="text" class="form-control" id="latitude" name="latitude">
-                    <small id="locationHelp" class="form-text text-muted">Click on the map to add a location</small>
+                    <input type="number" class="form-control" id="latitude" step="0.00001" name="latitude" min="-90" max="90">
                 </div>
                 <div class="form-group col-auto">
                     <label for="longitude">Longitude:</label>
-                    <input type="text" class="form-control" id="longitude" name="longitude">
+                    <input type="number" class="form-control" id="longitude" step="0.00001" name="longitude" min="-180" max="180">
                 </div>
             </div>
-            <div id="mapid" style="height: 400px; width:800px">
-            </div>
-        </div>-->
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
+            <small id="eventHelpBlock" class="form-text text-muted">
+                Returns all events within 5km of the given latitude and longitude
+            </small>
+            <br>
+            <button type="button" onclick="showNormalSearch()" class="btn-outline-success btn-sm">Search by Name and Date</button>
+            <br><br>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <div class="row" id="mapSection" style="display: none">
+        <div id='back_button' class='clearfix'>
+            <a class='btn btn-primary float-right' onclick='hideResults()'>← Back to search</a>
+        </div>
+        <br>
+        <div id="mapid" style="height: 400px; width:800px">
+        </div>
+    </div>
 
     <div class="row">
         <div id="results" class="col-lg-8 col-md-10 mx-auto" style="display: none;">

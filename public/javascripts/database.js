@@ -119,12 +119,30 @@ function getCachedEvents() {
     }
 }
 
+function getEventById(id){
+    $.ajax({
+        url: '/getEvent' ,
+        dataType: 'json',
+        type: 'POST',
+        data: {id: id},
+        success: function (dataR) {
+            console.log("Here is event data:");
+            console.log(dataR);
+            loadEventData(dataR);
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error.message);
+            getCachedEventById(id, dataR => loadEventData(dataR));
+        }
+    });
+}
+
 /**
  * it retrieves an event from the database
  * @param id the identifier for the event in the database
  * @param callback - callback function
  */
-function getEventById(id, callback){
+function getCachedEventById(id, callback){
     if (dbPromise) {
         dbPromise.then(function (db) {
             console.log('fetching: event'+id);
@@ -149,23 +167,38 @@ function getEventById(id, callback){
  */
 function getCachedSearcedEvents(data){
     console.log(data);
-    /*if (dbPromise) {
+    let foundList = [];
+    if (dbPromise) {
         dbPromise.then(function (db) {
-            console.log('fetching: event'+id);
+            console.log('fetching: events');
             var tx = db.transaction(EVENTS_STORE_NAME, 'readonly');
             var store = tx.objectStore(EVENTS_STORE_NAME);
-            var index = store.index('_id');
-            return index.getAll(IDBKeyRange.only(id));
-        }).then(function (itemsList) {
-            // Expected to return only one result as id is unique in the database
-            //TODO - add some checks
-            console.log(itemsList[0]);
-            // Returns the event as a callback
-            callback(itemsList[0]);
-        }).catch(function (error) {
-            console.log('error: ' + error);
+            return store.openCursor();
+        }).then(function allItems(cursor) {
+            if (!cursor) {return;}
+            //console.log('Cursored at:', cursor.key);
+
+            if (data.name.length != 0 && data.date.length !=0){
+                if ((cursor.value.name == data.name) && (cursor.value.date == data.date)) {
+                    foundList.push(cursor.value);
+                }
+            } else {
+                if(data.name.length != 0){
+                    if (cursor.value.name === data.name){
+                        foundList.push(cursor.value);
+                    }
+                } else if (data.date.length != 0){
+                    if (cursor.value.date === data.date){
+                        foundList.push(cursor.value);
+                    }
+                }
+            }
+            return cursor.continue().then(allItems);
+        }).then(function() {
+            addToResults(foundList.sort((a, b) => (a.date > b.date) ? 1 : -1));
+            console.log('Done cursoring');
         });
-    }*/
+    }
 }
 
 /**

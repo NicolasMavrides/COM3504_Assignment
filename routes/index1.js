@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../controllers/db_init');
+var mongoServer = require('../controllers/mongoServer');
 
 db.init_sample();
 
@@ -18,7 +19,12 @@ router.get('/about', function(req, res, next) {
 
 var events = require('../controllers/events');
 
-router.post('/getEvents', events.getEvents);
+router.post('/getEvent', function (req, res) {
+    mongoServer.contact(req, res, false);
+});
+router.post('/getEvents', function (req, res) {
+    mongoServer.contact(req, res, false);
+});
 
 /* GET events form */
 router.get('/create_event', function(req, res, next) {
@@ -38,25 +44,38 @@ router.get('/search', function(req, res, next) {
 router.get('/events/:event_id', events.open);
 
 /* POST the Event form */
-router.post('/post_event', events.create);
+router.post('/post_event', function (req, res) {
+    mongoServer.contact(req, res, true);
+});
 
 /* POST the search form */
-router.post('/search_event', events.search);
+router.post('/search_event', function (req, res) {
+    mongoServer.contact(req, res, false);
+});
+
+/* POST the map  form */
+router.post('/search_map', function (req, res) {
+    mongoServer.contact(req, res, false);
+});
 
 //////////////////// Comments ////////////////////
 
-var comments = require('../controllers/comments');
-
-router.post('/getComments', comments.getComments);
+router.post('/getComments', function (req, res) {
+    mongoServer.contact(req, res, false);
+});
 
 /* POST the comment form */
-router.post('/post_comment', comments.create);
+router.post('/post_comment', function (req, res) {
+    mongoServer.contact(req, res, true);
+});
 
 /////////////////// Stories //////////////////////
 
 var stories = require('../controllers/stories');
 
-router.post('/getStories', stories.getStories);
+router.post('/getStories', function (req, res) {
+    mongoServer.contact(req, res, false);
+});
 
 /* GET stories form */
 router.get('/create_story', function(req, res, next) {
@@ -71,7 +90,9 @@ router.get('/create_story', function(req, res, next) {
 router.get('/stories/:story_id', stories.open);
 
 /* POST the Story form */
-router.post('/post_story', stories.create);
+router.post('/post_story', function (req, res) {
+    mongoServer.contact(req, res, true);
+});
 
 /* GET Not Found page */
 router.get('/not_found', function(req, res, next) {

@@ -9,9 +9,9 @@ mongoose.connect(mongoDB);
 
 try {
     mongoose.storiesCon = mongoose.createConnection(mongoDB, { useNewUrlParser: true });
-    console.log("connection to MongoDB complete!");
+    console.log("connection to Stories MongoDB complete!");
 } catch (e) {
-    console.log('error in connection: '+e.message)
+    console.log('error in Stories DB connection: '+e.message)
 }
 
 module.exports = mongoose;

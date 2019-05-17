@@ -30,6 +30,11 @@ h2 {
   text-align: center;
 }
 
+label {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 @media only screen and (max-width: 793px) {
   .profile_pic, .about, .stories-btn {
     float: none;

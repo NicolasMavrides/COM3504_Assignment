@@ -88,23 +88,6 @@ router.post('/upload', upload.single('avatar'), function(req, res) {
 });
 
 
-/*
-User.updateOne({ _id : req.user._id }, {$set:{avatar: req.file.originalname}}, function(err, result) {
-  console.log(result);
-  if (err)
-  {
-    console.log(err);
-    req.flash(
-        'error',
-        'There was a problem updating your picture.'
-    );
-    res.redirect('/profile/' + req.user.username)
-
-  }
-});
-
-*/
-
 /* GET profile edit page. */
 router.get('/edit_profile', users.editProfile);
 
@@ -113,18 +96,3 @@ router.post('/edit_profile', users.saveProfile);
 
 
 module.exports = router;
-
-
-
-
-
-
-
-
-/* GET profile photo edit page */
-//router.get('/edit_photo/:username/', users.editPhoto);
-
-/* POST profile photo edit page */
-//router.post('/edit_photo/:username/', users.savePhoto);
-
-

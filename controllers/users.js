@@ -160,42 +160,71 @@ exports.editProfile = function(req, res, next) {
     var email = user.email;
     var username = user.username;
     var about = user.about;
-    res.render('edit_profile', { name: name, email: email, username: username, user: user, about: about });
-    console.log(name);
-    console.log(email);
-    console.log(username);
-    console.log(about);
-
+    var avatar = user.avatar;
+    res.render('edit_profile', { name: name, email: email, username: username, user: user, about: about, avatar: avatar });
 };
 
 
 exports.saveProfile = function(req, res, next) {
-   // var user = req.user;
     const { name, email, username, about, password, password_verify } = req.body;
+    let errors = []; // list of possible errors that may occur
 
-    console.log(name);
-    console.log(email);
-    console.log(username);
-    console.log(about);
+    // Validation checks on field completion and password matching
+    if (!name || name.length < 5) {
+        errors.push({msg: 'Please provide a name that is at least 5 characters long.'});
+    } else if (!email || !email_val.validate(email)) {
+        errors.push({msg: 'Please provide an email that is of the correct format (eg. example@email.com).'});
+    } else if (!username) {
+        errors.push({msg: 'Please fill a username.'});
+    } else if (!password || !password_verify) {
+        errors.push({msg: 'Please fill in a password and make sure it is filled in twice.'});
+    } else if (password.length < 5) {
+        errors.push({ msg: 'Password cannot be less than 5 characters long.' });
+    } else if (password !== password_verify) {
+        errors.push( {msg: 'Passwords entered do not match, please try again.' });
+    }
 
-    User.updateOne({ _id : req.user._id }, {$set:{username: username}}, function(err, result) {
-        console.log(result);
-        if (err)
-        {
-            console.log(err);
-            req.flash(
-                'error',
-                'There was a problem updating your profile.'
-            );
-            res.render('edit_profile');
+    // If any validation checks fail, load the form again
+    if (errors.length > 0) {
+        res.render('edit_profile', {
+            errors,
+            user: req.user,
+            name,
+            email,
+            username,
+            password,
+            password_verify,
+            about
+        });
+    } else {
 
-        }
-        req.flash(
-            'success',
-            'Profile updated successfully!.'
+        // Use salting to encrypt the user password with bcrypt as before
+        bcrypt.genSalt(10, (error, salt) =>
+            bcrypt.hash(req.body.password, salt, (error, hash) => {
+                if (error) throw error;
+
+                User.update({ _id : req.user._id} , {$set: { name: name, email: email, username: username, about: about, password: hash } }, function(err, result) {
+                    console.log(result);
+                    if (err)
+                    {
+                        console.log(err);
+                        req.flash(
+                            'error',
+                            'There was a problem updating your profile.'
+                        );
+                        res.render('edit_profile');
+
+                    }
+                    req.flash(
+                        'success',
+                        'Profile updated successfully!.'
+                    );
+
+                    res.render('profile', { user: req.user, name: name, email: email, username: username, about: about, avatar: req.user.avatar });
+                });
+            })
         );
-        res.render('profile', { user: req.user, name: name, email: email, username: username, about: about });
-    });
+    }
 };
 
 
@@ -204,11 +233,3 @@ exports.logout = function(req, res, next) {
     req.flash('success', 'You have successfully logged out');
     res.redirect('/login');
 };
-
-
-
-// TODO:
-// - modify User object to include avatar as field and upload image as avatar
-// - Esure-authenticated
-
-// - socket.io notification

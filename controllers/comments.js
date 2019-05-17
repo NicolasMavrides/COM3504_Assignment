@@ -15,7 +15,7 @@ exports.create = function (req, res) {
             comment: commentData.comment,
             date: new Date().getTime()
         });
-        console.log('received: ' + comment);
+        console.log('received comment: ' + comment);
 
         comment.save(function (err, results) {
             console.log(results._id);

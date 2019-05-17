@@ -26,6 +26,7 @@ let constraints = {
     video: true
 };
 
+/** Initialize variables for the camera */
 function startUp(){
     video = document.getElementById('video');
     canvas = document.getElementById('canvas');
@@ -52,12 +53,13 @@ function startUp(){
     button.addEventListener('click', snapshot, false);
 }
 
+/** Function to take a picture */
 function snapshot() {
-    console.log('click');
     if (localMediaStream) {
         var ctx = canvas.getContext('2d');
         canvas.width = width;
         canvas.height = height;
+        // Draw image to canvas
         ctx.drawImage(video, 0, 0, width, height);
         console.log(canvas.toDataURL('image/png'));
         var data = canvas.toDataURL('image/png');
@@ -66,6 +68,10 @@ function snapshot() {
     }
 }
 
+/**
+ * Callback function for failed attempt to GetUserMedia
+ * @param error
+ */
 function errorCallback(error) {
     console.log("navigator.getUserMedia error: ", error);
 }

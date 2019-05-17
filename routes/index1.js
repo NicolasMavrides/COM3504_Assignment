@@ -1,3 +1,5 @@
+//Routes for the main server
+
 var express = require('express');
 var router = express.Router();
 var db = require('../controllers/db_init');
@@ -22,6 +24,7 @@ var events = require('../controllers/events');
 router.post('/getEvent', function (req, res) {
     mongoServer.contact(req, res, false);
 });
+
 router.post('/getEvents', function (req, res) {
     mongoServer.contact(req, res, false);
 });
@@ -35,37 +38,11 @@ router.get('/create_event', function(req, res, next) {
     }
 });
 
-/* GET the search form */
-router.get('/search', function(req, res, next) {
-    res.render('search', { user : req.user });
-});
-
 /* GET an event */
 router.get('/events/:event_id', events.open);
 
 /* POST the Event form */
 router.post('/post_event', function (req, res) {
-    mongoServer.contact(req, res, true);
-});
-
-/* POST the search form */
-router.post('/search_event', function (req, res) {
-    mongoServer.contact(req, res, false);
-});
-
-/* POST the map  form */
-router.post('/search_map', function (req, res) {
-    mongoServer.contact(req, res, false);
-});
-
-//////////////////// Comments ////////////////////
-
-router.post('/getComments', function (req, res) {
-    mongoServer.contact(req, res, false);
-});
-
-/* POST the comment form */
-router.post('/post_comment', function (req, res) {
     mongoServer.contact(req, res, true);
 });
 
@@ -91,12 +68,42 @@ router.get('/stories/:story_id', stories.open);
 
 /* POST the Story form */
 router.post('/post_story', function (req, res) {
+    console.log('posting');
+    console.log(req.body);
     mongoServer.contact(req, res, true);
 });
 
 /* GET Not Found page */
 router.get('/not_found', function(req, res, next) {
-  res.render('not_found');
+    res.render('not_found');
+});
+
+//////////////////// Comments ////////////////////
+
+router.post('/getComments', function (req, res) {
+    mongoServer.contact(req, res, false);
+});
+
+/* POST the comment form */
+router.post('/post_comment', function (req, res) {
+    mongoServer.contact(req, res, true);
+});
+
+//////////////////// Search /////////////////////
+
+/* GET the search form */
+router.get('/search', function(req, res, next) {
+    res.render('search', { user : req.user });
+});
+
+/* POST the search form */
+router.post('/search_event', function (req, res) {
+    mongoServer.contact(req, res, false);
+});
+
+/* POST the map  form */
+router.post('/search_map', function (req, res) {
+    mongoServer.contact(req, res, false);
 });
 
 module.exports = router;

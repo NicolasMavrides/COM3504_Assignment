@@ -51,18 +51,17 @@ router.post('/register', users.createAccount);
 router.get('/profile/:username', users.loadProfile);
 
 /* GET edit profile */
-router.get('/edit_profile/', users.editProfile);
+router.get('/edit_profile', users.editProfile);
 
 /* POST edit profile */
-router.post('/edit_profile/', users.saveProfile);
+router.post('/edit_profile', users.saveProfile);
 
 
 
 
 /* GET profile picture upload page */
 router.get('/edit_photo', function(req, res, next) {
-  var user = req.user.username;
-  res.render('edit_photo', { user : user, username: user.username});
+  res.render('edit_photo', { user : req.user, username: req.user.username});
 });
 
 

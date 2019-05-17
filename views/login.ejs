@@ -22,7 +22,7 @@
     <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body onload="initServiceWorker()">
 <!-- Navigation -->
 <% include templates/navbar.ejs %>
 
@@ -49,17 +49,14 @@
         <div class="form-row">
             <div class="form-group col-auto">
                 <label for="username">Login:</label>
-                <input type="text" placeholder="Username" value="<%= typeof username != 'undefined' ? username : '' %>">
+                <input type="text" name="username" placeholder="Username" value="<%= typeof username != 'undefined' ? username : '' %>">
             </div>
-        </div>
-        <div class="form-row">
             <div class="form-group col-auto">
                 <label for="password">Password:</label>
-                <input type="password" name="password">
+                <input type="password" name="password" placeholder="Password">
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <input type="submit">
+        <button type="submit" class="btn btn-primary">Login</button>
     </form>
 </div>
 <hr>

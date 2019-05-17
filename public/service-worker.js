@@ -88,13 +88,16 @@ var filesToCache = [
     '/javascripts/clean-blog.js',
     '/javascripts/clean-blog.min.js',
     '/javascripts/database.js',
+    '/javascripts/events.js',
     '/javascripts/idb.js',
     '/javascripts/leaflet.js',
     '/javascripts/leaflet.js.map',
     '/javascripts/leaflet-src.esm.js',
     '/javascripts/leaflet-src.js',
     '/javascripts/login.js',
+    '/javascripts/map.js',
     '/javascripts/register.js',
+    '/javascripts/search.js',
     '/jquery/jquery.js',
     '/jquery/jquery.min.js',
     '/jquery/jquery.slim.js',
@@ -167,14 +170,6 @@ self.addEventListener('fetch', function (event) {
                 console.log("service worker error 1: " + e.message);
             })
         );
-        /*return fetch(event.request).then(function (response) {
-            // note: if the network is down, response will contain the error
-            // that will be passed to Ajax
-            //console.log(response);
-            return response;
-        }).catch (function(e){
-            console.log("service worker error 1: " + e.message);
-        })*/
     } else {
         /*
          * The app is asking for app shell files. In this scenario the app uses the

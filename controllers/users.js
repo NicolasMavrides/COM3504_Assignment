@@ -3,7 +3,7 @@ var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var email_val = require("email-validator");
 
-
+/** Function to create a user */
 exports.createAccount = function(req, res) {
     const { name, email, username, password, password_verify, avatar } = req.body;
     let errors = []; // list of possible errors that may occur
@@ -152,7 +152,9 @@ exports.loadProfile = function(req, res, next) {
 };
 
 
-
+/**
+ * Function to edit a user profile
+ */
 exports.editProfile = function(req, res, next) {
     var user = req.user;
     var name = user.name;
@@ -167,7 +169,9 @@ exports.editProfile = function(req, res, next) {
 
 };
 
-
+/**
+ * Function to save a user profile
+ */
 exports.saveProfile = function(req, res, next) {
    // var user = req.user;
     const { name, email, username, about, password, password_verify } = req.body;

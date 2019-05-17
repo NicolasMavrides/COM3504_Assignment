@@ -185,6 +185,7 @@ function addToComments(dataR){
             "</h5>" + getComment(dataR);
     }
 }
+
 ////////////////// FORM FUNCTIONS //////////////////
 /**
  * Given a new event or story, it sends the data to the server via Ajax

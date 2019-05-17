@@ -2,18 +2,13 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Selfie With Fame - Profile</title>
+    <title>Selfie With Fame - Upload Profile Picture</title>
     <link rel="manifest" href="/manifest.json">
-    <script src="/javascripts/idb.js"></script>
-
-    <!-- Stylesheet -->
-    <link href="/stylesheets/style.css" rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -25,12 +20,12 @@
 
     <!-- Custom styles for this template -->
     <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
-
-
 </head>
 
 <body onload="initServiceWorker()">
 
+<body>
+<!-- Navigation -->
 <% include templates/navbar.ejs %>
 
 <!-- Page Header -->
@@ -40,36 +35,24 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h1><%= name %></h1>
-                    <span class="subheading">Author Profile</span>
+                    <div class="container">
+                        <h3>Upload Profile Picture</h3>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <% if (user !== undefined) { %>
-        <% if(user.username === username) { %>
-            <label>EDIT LINK</label>
-        <% } %>
-    <% } %>
+<% include templates/messages.ejs %>
 
-        <% include templates/messages.ejs %>
-
-        <h2>About</h2>
-    <p class="text-center"><b>Email:</b> <%= email %> | <b>Username:</b> <%= username %></p>
-    <div class="row">
-        <div id="wrapper">
-                <img src="/images/profile_pic_blank.png" class="profile_pic" alt="...">
-                <div class="about" contenteditable="true">
-                    <p><%= about %></p>
-                </div>
-            <a href="#" class="btn btn-primary stories-btn">My Stories</a>
-        </div>
-    </div>
-</div>
+<form onsubmit="getUser()" enctype="multipart/form-data">
+    <h2> Upload or change your Profile Picture</h2>
+    Profile picture:<br/>
+    <input type="file" name="avatar">
+    <br/>
+    <input type="submit" class="btn-light"></form>
+</form>
 
 <hr>
 
@@ -83,7 +66,10 @@
 <!-- Custom scripts for this template -->
 <script src="/javascripts/clean-blog.min.js"></script>
 <script src="/javascripts/app.js"></script>
-<script src="/javascripts/database.js"></script>
+<script src="/javascripts/idb.js"></script>
+
+<!-- Form script -->
+<script src="/javascripts/register.js"></script>
 
 </body>
 

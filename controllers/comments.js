@@ -32,7 +32,7 @@ exports.create = function (req, res) {
 
 
 /**
- * Function to retrieve all the stories from the mongoose database
+ * Function to retrieve comments from the mongoose database
  */
 exports.getComments = function (req, res) {
     let eventID= req.body.id;

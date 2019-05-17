@@ -3,7 +3,6 @@ const fs = require('fs');
 
 /** Function to create a user story */
 exports.create = function (req, res) {
-    if (req.user) {
         let storyData = req.body;
         if (storyData == null) {
             res.status(403).send('No data sent!')
@@ -34,9 +33,6 @@ exports.create = function (req, res) {
         } catch (e) {
             res.status(500).send('error ' + e);
         }
-    } else {
-        res.redirect('/login');
-    }
 };
 
 
@@ -64,10 +60,14 @@ exports.open = function (req, res) {
     }
 };
 
+/**
+ * Function to upload an image
+ */
 function uploadImage(user, image){
     return new Promise((resolve, reject) => {
         targetDirectory = './public/user-images/' + user + '/';
         var filePath = targetDirectory + new Date().getTime();
+        //Create folder if it doesn't exist
         if (!fs.existsSync(targetDirectory)) {
             fs.mkdirSync(targetDirectory);
         }

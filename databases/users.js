@@ -8,9 +8,9 @@ mongoose.connect(mongoDB);
 
 try {
     mongoose.usersCon = mongoose.createConnection(mongoDB, { useNewUrlParser: true });
-    console.log("connection to MongoDB complete!");
+    console.log("connection to Users MongoDB complete!");
 } catch (e) {
-    console.log('error in connection: '+e.message)
+    console.log('error in Users DB connection: '+e.message)
 }
 
 module.exports = mongoose;

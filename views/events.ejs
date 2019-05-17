@@ -28,7 +28,7 @@
     <link href="/stylesheets/clean-blog.min.css" rel="stylesheet">
 </head>
 
-<body onload="initServiceWorker(); loadEventData(<%= JSON.stringify(id) %>)">
+<body onload="initServiceWorker(); getEventById(<%= JSON.stringify(id) %>)">
 
 <% include templates/navbar.ejs %>
 
